@@ -2,6 +2,8 @@
 *.ipch
 .vs/*
 .vscode/*
+*.pdb
+*.log
 #Ignore files besides main cpp
 Sorter.*
 !Sorter.cpp
@@ -9,4 +11,4 @@ Sorter.*
 Debug/*
 #Ignore release files
 x64/*
-Soter/x64*
+Sorter/x64*
