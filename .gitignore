@@ -1,0 +1,11 @@
+#ignore non-useful VS-generated files
+*.ipch
+.vs/*
+.vscode/*
+#Ignore files besides main cpp
+Sorter.*
+!Sorter.cpp
+#Ignore debug files
+Debug/*
+#Ignore release files
+x64/*
