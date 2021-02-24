@@ -1,0 +1,9 @@
+Sorting application for use after data recovery (lost file structure.)
+
+The executable should be run from an empty directory, as it will create its own structure.
+File names and any structure will be lost, as files will be sorted by filetype into folders. Any files with
+unsorted or unknown filenames or filetypes will be placed in "SourceUnhandled."
+
+The program can accept two flags;
+    `-postclean` will remove any source files after the program completes
+    `-nomaxes` mostly a test flag, will ignore any existing sorted files, can save very minimal time
