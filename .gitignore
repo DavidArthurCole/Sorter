@@ -9,3 +9,4 @@ Sorter.*
 Debug/*
 #Ignore release files
 x64/*
+Soter/x64*
