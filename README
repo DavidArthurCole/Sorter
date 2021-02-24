@@ -1,6 +1,8 @@
 Sorting application for use after data recovery (lost file structure.)
 
-The executable should be run from an empty directory, as it will create its own structure.
+The executable should be run for the first time from an empty directory, as it will create its own structure.
+After that, files that need sorting should be placed in Source/, and the executable should be run again.
+
 File names and any structure will be lost, as files will be sorted by filetype into folders. Any files with
 unsorted or unknown filenames or filetypes will be placed in "SourceUnhandled."
 
