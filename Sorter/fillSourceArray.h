@@ -76,25 +76,28 @@ std::vector<std::string> getAllFilesInDir(const std::string& dirPath, const std:
 }
 
 //Fills the source arrays (paths, filenames) with all files found in source
-void fillSourceArray()
+void fillSourceArray(std::vector<FileHandler> fileHandlers)
 {
+    namespace fs = boost::filesystem;
+    int k = 0;
+
     std::string dirPath = sourcePath;
     // Get recursive list of files in given directory and its sub directories
     std::vector<std::string> listOfFiles = getAllFilesInDir(dirPath);
     // Iterate over the vector and print all files
-    for (auto str : listOfFiles)
+    for (auto &str : listOfFiles)
     {
-        if (!std::filesystem::is_directory(str))
+
+        if (!fs::is_directory(str))
         {
             //Stores full path for the file
-            sourcePathFilesFullPath[sourcePathCount] = str;
+            sourcePathFilesFullPath.push_back(str);
 
             //Stores just the file name
             int indexOfSlash = int(str.find_last_of("\\")) + 1;
             std::string fileName = str.substr(indexOfSlash, str.length() - indexOfSlash);
-            sourcePathFileNames[sourcePathCount] = fileName;
+            sourcePathFileNames.push_back(fileName);
             sourcePathCount++;          
         }
     }
-    sortArrays();
 }

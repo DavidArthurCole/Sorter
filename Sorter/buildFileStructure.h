@@ -120,7 +120,7 @@ void buildFileStructure()
 	//For each filetype, create its respective log
 	for (int i = 0; i < DIF_FILE_TYPES ; i++)
 	{
-		std::string logPath = "Logs\\" + boost::algorithm::to_lower_copy(allFileTypes[i]) + "_log.txt";
+		std::string logPath = "Logs\\" + boost::algorithm::to_lower_copy(allFileTypes->at(i)) + "_log.txt";
 
 		std::fstream fileStream;
 		fileStream.open(logPath);

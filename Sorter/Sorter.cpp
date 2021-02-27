@@ -8,22 +8,30 @@
 
 //Custom header files
 #include "sortAll.h"
-#include "getCurrentMaxes.h"
 #include "buildFileStructure.h"
 #include "cleanSource.h"
 #include "getFolderSize.h"
+
+//STILL IN DEVELOPMENT
+#include "FileHandler.h"
 
 int main(int argc, char* argv[])
 {
 	//Will build the folder structure that the program uses
 	buildFileStructure();
 
+	std::vector<FileHandler> fileHandlers;
+
+	for (int i = 0; i < DIF_FILE_TYPES; i++) {
+		fileHandlers.push_back(FileHandler(allFileTypes->at(i), allFileTypesContainers->at(i)));
+	}
+
 	//Timer started
 	auto start = std::chrono::steady_clock::now();
 
 	// Will calculate (if any files already exist) what the max numerical value is
 	// so the program can rename accordingly
-	getCurrentMaxes(argc, argv);
+	//getCurrentMaxes(argc, argv);
 
 	//Timer ended
 	auto end = std::chrono::steady_clock::now();
@@ -34,7 +42,9 @@ int main(int argc, char* argv[])
 	auto start2 = std::chrono::steady_clock::now();
 
 	//Adds files into arrays to be sorted
-	fillSourceArray();
+	fillSourceArray(fileHandlers);
+	sortArrays(fileHandlers);
+	std::cout << "Full path size = " << fileHandlers.at(7).fullPath.size() << "\n";
 
 	//Timer ended
 	auto end2 = std::chrono::steady_clock::now();
@@ -58,7 +68,7 @@ int main(int argc, char* argv[])
 	auto start3 = std::chrono::steady_clock::now();
 
 	//Sorts all files (including folders)
-	sortAll();
+	sortAll(fileHandlers);
 	//Timer ended
 	auto end3 = std::chrono::steady_clock::now();
 	auto duration3 = std::chrono::duration_cast<std::chrono::milliseconds>(end3 - start3);

@@ -8,6 +8,8 @@
 
 void cleanSource(int argc, char* argv[])
 {
+	namespace fs = boost::filesystem;
+
 	for (int i = 1; i < argc; i++)
 	{
 		if (std::string(argv[i]) == "-postclean" && freshSource == false)
@@ -23,13 +25,13 @@ void cleanSource(int argc, char* argv[])
 			bool sourceDeleted = false;
 			while (sourceDeleted == false)
 			{
-				if (!std::filesystem::exists(sourcePath))
+				if (!fs::exists(sourcePath))
 				{
 					sourceDeleted = true;
 				}
 			}
 			//Creates the source directory again
-			std::filesystem::create_directory(sourcePath);
+			fs::create_directory(sourcePath);
 
 			//Last clock ends
 			auto end5 = std::chrono::steady_clock::now();
