@@ -14,7 +14,7 @@ int getTypeIndex(std::vector<std::string> v, std::string K) {
 		{
 			// calculating the index
 			// of K
-			int index = it - v.begin();
+			int index = static_cast<int>(it - v.begin());
 			return(index);
 		}
 		else {
@@ -57,7 +57,7 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		}
 		else {
 			//Finds the index of the filetype in the vector
-			fileExtIndex = std::find(allFileTypes->begin(), allFileTypes->end(), fileExtUpper) - allFileTypes->begin();
+			fileExtIndex = static_cast<int>(std::find(allFileTypes->begin(), allFileTypes->end(), fileExtUpper) - allFileTypes->begin());
 		}
 
 		//-1 will be returned if the filetype is not sorted

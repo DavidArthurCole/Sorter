@@ -2,8 +2,8 @@
 #define FileHandler_HEADER
 
 #include <string>
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
+#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/algorithm/string.hpp>
+#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/filesystem.hpp>
 #include <Windows.h>
 #include <iostream>
 
@@ -46,7 +46,7 @@ class FileHandler {
 			namespace fs = boost::filesystem;
 
 			//For use in the file searching
-			int amtToSubtract = this->fileType.length();
+			int amtToSubtract = static_cast<int>(this->fileType.length());
 
 			//Appends the correct container name given the container var
 			std::string pathAppend = "";

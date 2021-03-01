@@ -3,8 +3,8 @@
 #include <string>
 #include <chrono>
 #include <io.h>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/path.hpp>
+#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/filesystem.hpp>
+#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/filesystem/path.hpp>
 
 //Custom header files
 #include "sortAll.h"
@@ -12,7 +12,7 @@
 #include "cleanSource.h"
 #include "getFolderSize.h"
 
-//STILL IN DEVELOPMENT
+//Class for holding filetype pieces
 #include "FileHandler.h"
 
 int main(int argc, char* argv[])

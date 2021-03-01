@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <boost/algorithm/string.hpp>
+#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/algorithm/string.hpp>
 
 #include "programWideVars.h"
 #include "fillSourceArray.h"
@@ -15,6 +15,7 @@ int totalSorts = 0;
 
 void sortAll(std::vector<FileHandler> fileHandlers)
 {
+	
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
 		if (fileHandlers.at(i).count > 0) {
 			sortFiles(fileHandlers.at(i).fullPath, fileHandlers.at(i).fileNames, fileHandlers.at(i).fileType, fileHandlers.at(i).currentMax + 1, fileHandlers.at(i).count, fileHandlers.at(i).container);
