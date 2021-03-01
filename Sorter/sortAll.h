@@ -11,10 +11,11 @@
 //Void for sorting files
 void sortFiles(std::vector<std::string> fileFullPath, std::vector<std::string> fileFileNames, std::string fileType, int currentMaxPic, int picCount, int type);
 
+int totalSorts = 0;
+
 void sortAll(std::vector<FileHandler> fileHandlers)
 {
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
-		std::cout << fileHandlers.at(i).fileType << " count = " << fileHandlers.at(i).count << "\n";
 		if (fileHandlers.at(i).count > 0) {
 			sortFiles(fileHandlers.at(i).fullPath, fileHandlers.at(i).fileNames, fileHandlers.at(i).fileType, fileHandlers.at(i).currentMax + 1, fileHandlers.at(i).count, fileHandlers.at(i).container);
 		}
@@ -75,7 +76,8 @@ void sortFiles(std::vector<std::string> fileFullPath, std::vector<std::string> f
 		src.close();
 
 		logFileStore += fileFileNames.at(h) + " was renamed to " + fileTypeUpper + std::to_string(i) + "\n";
-		std::cout << "\rSorted " << h + 1 << " " << fileType << "s.";
+		totalSorts++;
+		std::cout << "\rSorted " << h + 1 << " " << fileType << "s. " << "(" << totalSorts << " total)";
 	}
 
 	//Rewrites log file

@@ -5,9 +5,6 @@
 #include "FileHandler.h"
 #include <iostream>
 
-//String to hold filetype before the file is sorted into its array
-std::string fileExt;
-
 int getTypeIndex(std::vector<std::string> v, std::string K) {
 	{
 		auto it = find(v.begin(), v.end(), K);
@@ -30,6 +27,14 @@ int getTypeIndex(std::vector<std::string> v, std::string K) {
 
 void sortArrays(std::vector<FileHandler> &fileHandlers)
 {
+	//String to hold filetype before the file is sorted into its array
+	std::string fileExt;
+	//Var for the index of the filetype in the 'all-types' array
+	int fileExtIndex;
+	//Intra-loop vars
+	std::string lastFileExt = "";
+	int lastIndex = 0;
+
 	// For every file that was added to the sourceArray
 	// (every file that existed in ../Source/
 	for (int i = 0; i < sourcePathCount; i++)
@@ -45,10 +50,17 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		// PNG), included for all to be safe
 
 		std::string fileExtUpper = boost::to_upper_copy(fileExt);
-		
 
-		int fileExtIndex = std::find(allFileTypes->begin(), allFileTypes->end(), fileExtUpper) - allFileTypes->begin();
+		//Saves calculation time if multiple files in a row have the same file type
+		if (fileExt == lastFileExt) {
+			fileExtIndex = lastIndex;
+		}
+		else {
+			//Finds the index of the filetype in the vector
+			fileExtIndex = std::find(allFileTypes->begin(), allFileTypes->end(), fileExtUpper) - allFileTypes->begin();
+		}
 
+		//-1 will be returned if the filetype is not sorted
 		if (fileExtIndex != -1){
 
 			fileHandlers.at(fileExtIndex).fullPath.push_back(sourcePathFilesFullPath.at(i));
@@ -57,10 +69,10 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		}
 		else
 		{
-			//Deals with nested folders or otherwise broken files,
+			//Deals with nested folders or otherwise unsorted files
 			//will dump them into SourceUnhandled
 
-			//Creates two directories to be used in copying
+			//Creates two directory strings to be used in copying
 			std::string sourceDir = sourcePathFilesFullPath.at(i);
 			std::string destDir = basePath + "SourceUnhandled/"+ sourcePathFileNames.at(i);
 			//The input file
@@ -73,6 +85,10 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 			src.close();
 			dst.close();
 		}
+
+		//intra-loop code
+		lastFileExt = fileExt;
+		lastIndex = fileExtIndex;
 	}
 	
 }

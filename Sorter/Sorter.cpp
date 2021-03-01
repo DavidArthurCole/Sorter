@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
 	//Will build the folder structure that the program uses
 	buildFileStructure();
 
+	//Creates an empty vector for file handlers
 	std::vector<FileHandler> fileHandlers;
 
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
@@ -44,7 +45,6 @@ int main(int argc, char* argv[])
 	//Adds files into arrays to be sorted
 	fillSourceArray(fileHandlers);
 	sortArrays(fileHandlers);
-	std::cout << "Full path size = " << fileHandlers.at(7).fullPath.size() << "\n";
 
 	//Timer ended
 	auto end2 = std::chrono::steady_clock::now();

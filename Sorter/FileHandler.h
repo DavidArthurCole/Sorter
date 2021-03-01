@@ -10,7 +10,7 @@
 class FileHandler {	
 
 	public:
-		
+
 		std::string fileType;
 		//Container points to which folder will contain the file type;
 			// 0 is documents

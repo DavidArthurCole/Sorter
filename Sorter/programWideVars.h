@@ -7,29 +7,37 @@
 //Namespace to use for the file adding iteration
 namespace fs = boost::filesystem;
 
-//Size used to create an array (aka maximum amount of files that can be handled in one iteration)
+//Size used to create an array (aka maximum amount of each file that can be handled in one iteration)
 const int MAX_SIZE = 16384;
 
-//THESE WILL NEED TO BE EDITED EVERYTIME A NEW FILETYPE IS ADDED
+// A SET OF THESE WILL NEED TO BE EDITED EVERYTIME A NEW FILETYPE IS ADDED
+// THE CONSTANT INT SHOULD ALWAYS BE EQUAL TO THE AMOUNT OF FILE TYPES IN THE ARRAY
+// PLEASE ALSO EDIT THE 'Visual File Structure' INSIDE OF buildFileStructure.h TO REFLECT CHANGES MADE
 //===========================================================================================================
+// IF YOU ARE ADDING A NEW PICTURE FILE TYPE:
 const int PIC_FILE_TYPES = 5;
-const int VID_FILE_TYPES = 8;
-const int DOC_FILE_TYPES = 8;
-const int AUDIO_FILE_TYPES = 4;
-
-const int DIF_FILE_TYPES = 25;
-
 const std::string picFileTypes[PIC_FILE_TYPES] = { "BMP","JFIF","JPEG","JPG","PNG" };
+//===========================================================================================================
+// IF YOU ARE ADDING A NEW VIDEO FILE TYPE:
+const int VID_FILE_TYPES = 8;
 const std::string vidFileTypes[VID_FILE_TYPES] = { "AVI", "FLV","GIF","MKV","MOV","MP4","MPG", "WEBM" };
+//===========================================================================================================
+// IF YOU ARE ADDING A NEW DOCUMENT FILE TYPE:
+const int DOC_FILE_TYPES = 8;
 const std::string docFileTypes[DOC_FILE_TYPES] = { "DOC", "DOCX", "PDF", "PPT", "PPTX","PST","XLS","XLSX" };
+//===========================================================================================================
+// IF YOU ARE ADDING A NEW AUDIO FILE TYPE:
+const int AUDIO_FILE_TYPES = 4;
 const std::string audioFileTypes[AUDIO_FILE_TYPES] = { "FLAC", "M4A", "MP3", "WAV" };
 //===========================================================================================================
 
+const int DIF_FILE_TYPES = PIC_FILE_TYPES + VID_FILE_TYPES + DOC_FILE_TYPES + AUDIO_FILE_TYPES;
 std::vector<std::string> allFileTypes[DIF_FILE_TYPES];
 std::vector<int> allFileTypesContainers[DIF_FILE_TYPES];
 
 void populateAllTypesArray()
 {
+	int h = 0;
 
 	//Adds picture file types to the 'all' array
 	for (int i = 0; i < PIC_FILE_TYPES; i++)
