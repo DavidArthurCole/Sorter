@@ -2,10 +2,11 @@
 #define FileHandler_HEADER
 
 #include <string>
-#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/algorithm/string.hpp>
-#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 #include <Windows.h>
 #include <iostream>
+#include <vector>
 
 class FileHandler {	
 

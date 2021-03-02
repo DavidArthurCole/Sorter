@@ -3,8 +3,8 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/filesystem.hpp>
-#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 #include <filesystem>
 
 #include "programWideVars.h"

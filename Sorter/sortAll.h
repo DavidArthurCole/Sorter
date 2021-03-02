@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/algorithm/string.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "programWideVars.h"
 #include "fillSourceArray.h"

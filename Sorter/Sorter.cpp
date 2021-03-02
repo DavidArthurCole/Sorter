@@ -3,8 +3,8 @@
 #include <string>
 #include <chrono>
 #include <io.h>
-#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/filesystem.hpp>
-#include <C:/Users/david/Documents/SDKS/boost_1_75_0/boost/filesystem/path.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/path.hpp>
 
 //Custom header files
 #include "sortAll.h"
