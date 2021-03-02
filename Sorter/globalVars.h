@@ -1,11 +1,11 @@
 #pragma once
-#include <string>
-#include <Windows.h>
-#include <boost/filesystem.hpp>
-#include <pathcch.h>
-
-//Namespace to use for the file adding iteration
-namespace fs = boost::filesystem;
+#ifndef GLOBAL_VARS_HEADER
+#define GLOBAL_VARS_HEADER
+#ifndef INCLUDES
+	#include <Windows.h>
+	#include <iostream>
+	#include "getExePath.h"
+#endif
 
 //Size used to create an array (aka maximum amount of each file that can be handled in one iteration)
 const int MAX_SIZE = 16384;
@@ -65,21 +65,11 @@ void populateAllTypesArray()
 	}
 }
 
-std::string getExePath()
-{
-	//Gets the full path, including the executable name
-	std::string path = fs::system_complete(fs::path(__argv[0])).string();
-	//Replaces \ with / in the path, needed for boost
-	std::replace(path.begin(), path.end(), '\\', '/');
-	//Returns the path without the .exe
-	return(path.substr(0, path.find_last_of("/") + 1));
-}
-
 //Working directory
 std::string basePath = getExePath();
 
 //Files that need to be sorted
-std::string sourcePath = basePath + "Source/";
+std::string sourcePath = basePath + "Source";
 
 //Path to log files
 std::string logsPath = basePath + "Logs/";
@@ -98,3 +88,5 @@ bool freshSource = false;
 
 //Size_T for source folder size
 size_t sourceSize;
+
+#endif

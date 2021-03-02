@@ -3,11 +3,10 @@
 #include <string>
 #include <chrono>
 #include <io.h>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/path.hpp>
 
 //Custom header files
 #include "sortAll.h"
+#include "sortArrays.h"
 #include "buildFileStructure.h"
 #include "cleanSource.h"
 #include "getFolderSize.h"
@@ -24,7 +23,7 @@ int main(int argc, char* argv[])
 	std::vector<FileHandler> fileHandlers;
 
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
-		fileHandlers.push_back(FileHandler(allFileTypes->at(i), allFileTypesContainers->at(i)));
+		fileHandlers.push_back(FileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath));
 	}
 
 	//Timer started
@@ -43,7 +42,7 @@ int main(int argc, char* argv[])
 	auto start2 = std::chrono::steady_clock::now();
 
 	//Adds files into arrays to be sorted
-	fillSourceArray(fileHandlers);
+	fillSourceArray(sourcePath);
 	sortArrays(fileHandlers);
 
 	//Timer ended

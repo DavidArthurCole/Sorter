@@ -1,9 +1,9 @@
 #pragma once
-#include <boost/filesystem.hpp>
 #include <string>
 #include <fstream>
 #include <Windows.h>
 #include <iostream>
+#include <filesystem>
 
 #include "globalVars.h"
 
@@ -11,6 +11,8 @@ HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 void buildFileStructure()
 {
+	using namespace std::filesystem;
+
 	// VISUAL FILE STRUCTURE 
 	//=========================
 	//  |
@@ -62,70 +64,53 @@ void buildFileStructure()
 	const char *baseFolderStructure[7] = 
 	{ "Documents\\", "Logs\\", "Audio\\", "Pictures\\", "Videos\\", "Source\\", "SourceUnhandled\\"};
 
+	if (!exists("Source\\")) {
+		SetConsoleTextAttribute(hConsole, 12);
+		std::cout << "Source folder did not exist, and was created at the beginning of this run.\nPlease add all files that need to be sorted to 'Source,' and run the program again.\n\n";
+		SetConsoleTextAttribute(hConsole, 15);
+		freshSource = true;
+	}
+		
 	//Creates base folders
-	for (int i = 0; i < 7; i++)
-	{
+	for (int i = 0; i < 7; i++) {
 		// If the folder doesn't exist
-		if (!boost::filesystem::exists(baseFolderStructure[i]))
-		{
-			//If the source file doesn't exist, tell the user they will need to rerun
-			if (baseFolderStructure[i] == "Source\\")
-			{
-				SetConsoleTextAttribute(hConsole, 12);
-				std::cout << "Source folder did not exist, and was created at the beginning of this run.\nPlease add all files that need to be sorted to 'Source,' and run the program again.\n\n";
-				SetConsoleTextAttribute(hConsole, 15);
-				freshSource = true;
-			}
-			boost::filesystem::create_directory(baseFolderStructure[i]);
-		}
+		if (!exists(baseFolderStructure[i])) create_directory(baseFolderStructure[i]);
 	}
 
 	//Creates video sub folders
-	for (int i = 0; i < VID_FILE_TYPES; i++)
-	{
+	for (int i = 0; i < VID_FILE_TYPES; i++) {
 		std::string folderPath = "Videos\\" + vidFileTypes[i];
-		if (!boost::filesystem::exists(folderPath))
-		{
-			boost::filesystem::create_directory(folderPath);
-		}
+		if (!exists(folderPath)) create_directory(folderPath);
 	}
 	//Creates picture sub folders
-	for (int i = 0; i < PIC_FILE_TYPES; i++)
-	{
+	for (int i = 0; i < PIC_FILE_TYPES; i++) {
 		std::string folderPath = "Pictures\\" + picFileTypes[i];
-		if (!boost::filesystem::exists(folderPath))
-		{
-			boost::filesystem::create_directory(folderPath);
-		}
+		if (!exists(folderPath)) create_directory(folderPath);
 	}
 	//Creates audio sub folders
-	for (int i = 0; i < AUDIO_FILE_TYPES; i++)
-	{
+	for (int i = 0; i < AUDIO_FILE_TYPES; i++) {
 		std::string folderPath = "Audio\\" + audioFileTypes[i];
-		if (!boost::filesystem::exists(folderPath))
-		{
-			boost::filesystem::create_directory(folderPath);
-		}
+		if (!exists(folderPath)) create_directory(folderPath);
 	}
 	//Creates document sub folders
-	for (int i = 0; i < DOC_FILE_TYPES; i++)
-	{
+	for (int i = 0; i < DOC_FILE_TYPES; i++) {
 		std::string folderPath = "Documents\\" + docFileTypes[i];
-		if (!boost::filesystem::exists(folderPath))
-		{
-			boost::filesystem::create_directory(folderPath);
-		}
+		if (!exists(folderPath)) create_directory(folderPath);
 	}
 
 	//For each filetype, create its respective log
-	for (int i = 0; i < DIF_FILE_TYPES ; i++)
-	{
-		std::string logPath = "Logs\\" + boost::algorithm::to_lower_copy(allFileTypes->at(i)) + "_log.txt";
+	for (int i = 0; i < DIF_FILE_TYPES ; i++) {
+	
+		std::locale loc;
+		std::string logPath = "Logs\\";
+		for (auto elem : allFileTypes->at(i)) {
+			logPath += std::tolower(elem, loc);
+		}
+		logPath += "_log.txt";
 
 		std::fstream fileStream;
 		fileStream.open(logPath);
-		if (fileStream.fail())
-		{
+		if (fileStream.fail()) {
 			//Creates the log as an empty file, and closest it
 			std::ofstream createLog(logPath);
 			createLog << "";

@@ -49,7 +49,8 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		// programs writing the files as such (mostly seen in JPG,
 		// PNG), included for all to be safe
 
-		std::string fileExtUpper = boost::to_upper_copy(fileExt);
+		std::string fileExtUpper;
+		for (auto elem : fileExt) fileExtUpper += std::toupper(elem);
 
 		//Saves calculation time if multiple files in a row have the same file type
 		if (fileExt == lastFileExt) {
