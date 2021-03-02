@@ -14,8 +14,14 @@
 //Class for holding filetype pieces
 #include "FileHandler.h"
 
+//Handles input flags
+#include "HandleFlags.h"
+
 int main(int argc, char* argv[])
 {
+	//Will handle any input flags
+	handleFlags(argc, argv);
+
 	//Will build the folder structure that the program uses
 	buildFileStructure();
 
@@ -23,7 +29,7 @@ int main(int argc, char* argv[])
 	std::vector<FileHandler> fileHandlers;
 
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
-		fileHandlers.push_back(FileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath));
+		fileHandlers.push_back(FileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath, noMaxes));
 	}
 
 	//Timer started
@@ -78,7 +84,8 @@ int main(int argc, char* argv[])
 	auto duration4 = std::chrono::duration_cast<std::chrono::milliseconds>(end4 - start);
 	std::cout << "Sorting program completed in " << float(duration4.count() / 1000.00) << " seconds.\n";
 
-	cleanSource(argc, argv);
+	//Cleans source if the flag was passed
+	cleanSource();
 
 	//Exit sequence
 	std::cout << "\nPress any key to exit...";

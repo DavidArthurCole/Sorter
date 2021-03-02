@@ -83,8 +83,14 @@ std::vector<std::string> sourcePathFileNames;
 //Counts how many files are in sourcePath
 int sourcePathCount = 0;
 
+//Counts total sorted files
+int totalSorts = 0;
+
 //Random boolean logic to prevent removing a freshly generated sourcedir
 bool freshSource = false;
+
+bool postClean = false;
+bool noMaxes = false;
 
 //Size_T for source folder size
 size_t sourceSize;

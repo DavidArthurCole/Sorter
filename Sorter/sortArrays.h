@@ -60,22 +60,16 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 			//Finds the index of the filetype in the vector
 			fileExtIndex = static_cast<int>(std::find(allFileTypes->begin(), allFileTypes->end(), fileExtUpper) - allFileTypes->begin());
 		}
-
 		//-1 will be returned if the filetype is not sorted
-		if (fileExtIndex != -1){
 
-			fileHandlers.at(fileExtIndex).fullPath.push_back(sourcePathFilesFullPath.at(i));
-			fileHandlers.at(fileExtIndex).fileNames.push_back(sourcePathFileNames.at(i));
-			fileHandlers.at(fileExtIndex).incrementCount();
-		}
-		else
-		{
+		if (fileExtIndex == (DIF_FILE_TYPES)) {
+
 			//Deals with nested folders or otherwise unsorted files
 			//will dump them into SourceUnhandled
 
 			//Creates two directory strings to be used in copying
 			std::string sourceDir = sourcePathFilesFullPath.at(i);
-			std::string destDir = basePath + "SourceUnhandled/"+ sourcePathFileNames.at(i);
+			std::string destDir = basePath + "SourceUnhandled/" + sourcePathFileNames.at(i);
 			//The input file
 			std::ifstream src(sourceDir, std::ios::binary);
 			//The output file
@@ -85,11 +79,18 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 			dst << src.rdbuf();
 			src.close();
 			dst.close();
+			totalSorts++;
+			std::cout << "\rSorted " << totalSorts << " unsupported files. " << "(" << totalSorts << " total)";
+		}
+		else {
+			fileHandlers.at(fileExtIndex).fullPath.push_back(sourcePathFilesFullPath.at(i));
+			fileHandlers.at(fileExtIndex).fileNames.push_back(sourcePathFileNames.at(i));
+			fileHandlers.at(fileExtIndex).incrementCount();
 		}
 
 		//intra-loop code
 		lastFileExt = fileExt;
 		lastIndex = fileExtIndex;
 	}
-	
+	if(totalSorts > 0) std::cout << "\n";
 }

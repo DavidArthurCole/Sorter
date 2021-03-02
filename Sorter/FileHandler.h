@@ -32,7 +32,7 @@ class FileHandler {
 
 		std::vector<std::string> fullPath { }, fileNames { };
 
-		FileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath) {
+		FileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath, bool noMaxes) {
 			//Sets the filetype
 			fileType = passedFileType;
 
@@ -61,40 +61,43 @@ class FileHandler {
 			//Initializes the currentMax as a 0
 			this->currentMax = 0;
 			//Calculates the maximum value
-			this->calcMax();
+			this->calcMax(noMaxes);
 		}
 
-		void calcMax() {
-
-			//For use in the file searching
-			int amtToSubtract = static_cast<int>(this->fileType.length());
-
-			//Appends the correct container name given the container var
-			std::string pathAppend = this->pathAppendFileType + this->fileType;
+		void calcMax(bool noMaxes) {
 
 			int store = -1, compare = 0;
 
-			for (const auto& entry : directory_iterator(this->basePath + pathAppend))
-			{
-				// Does not look through names of pre-existing folders
-				// Without this check, the program will violently crash
-				// every time it comes across a folder in a source dir
-				if (!is_directory(entry))
+			if (!noMaxes) {
+				//For use in the file searching
+				int amtToSubtract = static_cast<int>(this->fileType.length());
+
+				//Appends the correct container name given the container var
+				std::string pathAppend = this->pathAppendFileType + this->fileType;
+
+
+
+				for (const auto& entry : directory_iterator(this->basePath + pathAppend))
 				{
-					//Gets the name of a file (ex: "PNG1234")
-					std::string filePath = entry.path().filename().string();
-
-					//Gets only the numerical value from the name (ex: 1234)
-					compare = std::stoi(filePath.substr(amtToSubtract, (filePath.length() - amtToSubtract)));
-
-					// If the current filename is larger than store, replace store
-					if (compare > store)
+					// Does not look through names of pre-existing folders
+					// Without this check, the program will violently crash
+					// every time it comes across a folder in a source dir
+					if (!is_directory(entry))
 					{
-						store = compare;
+						//Gets the name of a file (ex: "PNG1234")
+						std::string filePath = entry.path().filename().string();
+
+						//Gets only the numerical value from the name (ex: 1234)
+						compare = std::stoi(filePath.substr(amtToSubtract, (filePath.length() - amtToSubtract)));
+
+						// If the current filename is larger than store, replace store
+						if (compare > store)
+						{
+							store = compare;
+						}
 					}
 				}
 			}
-
 			//Stores the currentMax in the var
 			this->currentMax = store;
 		}

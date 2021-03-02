@@ -7,11 +7,6 @@
 #include "fillSourceArray.h"
 #include "FileHandler.h"
 
-//Void for sorting files
-void sortFiles(FileHandler &fileHandler);
-
-int totalSorts = 0;
-
 void sortAll(std::vector<FileHandler> fileHandlers)
 {
 	//For all different file types
