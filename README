@@ -9,3 +9,9 @@ unsorted or unknown filenames or filetypes will be placed in "SourceUnhandled."
 The program can accept two flags;
     `-postclean` will remove any source files after the program completes
     `-nomaxes` mostly a test flag, will ignore any existing sorted files, can save very minimal time
+	
+To add a new file type to the sorter:
+	- programWideVars.h will need to be edited using the follow steps:
+		- Add the file type to the array near the top of the file corresponding to the type of file (Video, Pic, Audio or Document)
+		- Change the constant int below the array to be the same as the length of the array
+		- Update the "visual file structure" in buildFileStructure.h
