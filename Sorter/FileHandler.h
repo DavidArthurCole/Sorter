@@ -18,6 +18,9 @@ class FileHandler {
 			// 1 is audio
 			// 2 is pictures
 			// 3 is videos
+
+		std::string pathAppendFileType;
+
 		int container;
 		//Current max number of the stored file
 		int currentMax;
@@ -32,6 +35,20 @@ class FileHandler {
 
 			//Sets the container
 			container = passedContainer;
+			switch (container) {
+			case 0:
+				pathAppendFileType = "Documents/";
+				break;
+			case 1:
+				pathAppendFileType = "Audio/";
+				break;
+			case 2:
+				pathAppendFileType = "Pictures/";
+				break;
+			case 3:
+				pathAppendFileType = "Videos/";
+				break;
+			}
 
 			//How many of this file have been found
 			this->count = 0;
@@ -50,21 +67,8 @@ class FileHandler {
 			int amtToSubtract = static_cast<int>(this->fileType.length());
 
 			//Appends the correct container name given the container var
-			std::string pathAppend = "";
-			switch (this->container) {
-				case 0:
-					pathAppend = "Documents/";
-					break;
-				case 1:
-					pathAppend = "Audio/";
-					break;
-				case 2:
-					pathAppend = "Pictures/";
-					break;
-				case 3:
-					pathAppend = "Videos/";
-					break;
-			}
+			std::string pathAppend = this->pathAppendFileType;
+
 			//Appends the fileType var
 			std::string upperType = boost::to_upper_copy(this->fileType);
 			pathAppend += upperType;

@@ -9,60 +9,44 @@
 #include "FileHandler.h"
 
 //Void for sorting files
-void sortFiles(std::vector<std::string> fileFullPath, std::vector<std::string> fileFileNames, std::string fileType, int currentMaxPic, int picCount, int type);
+void sortFiles(FileHandler fileHandler);
 
 int totalSorts = 0;
 
 void sortAll(std::vector<FileHandler> fileHandlers)
 {
-	
+	//For all different file types
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
-		if (fileHandlers.at(i).count > 0) {
-			sortFiles(fileHandlers.at(i).fullPath, fileHandlers.at(i).fileNames, fileHandlers.at(i).fileType, fileHandlers.at(i).currentMax + 1, fileHandlers.at(i).count, fileHandlers.at(i).container);
+		//Creates a new editable fileHandler instance
+		FileHandler fileHandler = fileHandlers.at(i);
+		//If there are files of that type, sort them
+		if (fileHandler.count > 0) {
+			sortFiles(fileHandler);
 		}
+		//Sets the fileHandler in the vector to the changed one
+		fileHandlers.at(i) = fileHandler;
 	}
 }
 
-void sortFiles(std::vector<std::string> fileFullPath, std::vector<std::string> fileFileNames, std::string fileType, int currentMax, int count, int type)
+void sortFiles(FileHandler fileHandler)
 {
-	//Type usage;
-	// 0 - pictures
-	// 1 - videos
-	// 2 - documents
-	// 3 - music/audio
-
-	//Stores the current <type> log in a string so it can be
-	//appended instead of overwritten
-	std::ifstream inLogFile(logsPath + fileType + "_log.txt");
+	//Stores the current <type> log in a string so it can be appended instead of overwritten
+	std::ifstream inLogFile(logsPath + fileHandler.fileType + "_log.txt");
 	std::string logFileStore((std::istreambuf_iterator<char>(inLogFile)), (std::istreambuf_iterator<char>()));
 	inLogFile.close();
 
 	//Differentiation between array index and current max number
 	//Use h for referencing the array(s).
 	int h = 0;
-	std::cout << "Sorted 0 " << fileType << "s.";
-	for (int i = currentMax; i < (currentMax + count); i++, h++)
+	std::cout << "Sorted 0 " << fileHandler.fileType << "s.";
+	for (int i = fileHandler.currentMax; i < (fileHandler.currentMax + fileHandler.count); i++, h++)
 	{
-		//Creates two directories to be used in copying
-		std::string sourceDir = fileFullPath.at(h);
-		std::string fileTypeUpper = boost::to_upper_copy<std::string>(fileType);
+		//Puts the fileType into an upper case bound
+		std::string fileTypeUpper = boost::to_upper_copy<std::string>(fileHandler.fileType);
 
-		std::string destDir;
-		switch (type)
-		{
-		case 0:
-			destDir = basePath + "Documents/" + fileTypeUpper + "/" + fileTypeUpper + std::to_string(i) + "." + fileType;	
-			break;
-		case 1:
-			destDir = basePath + "Audio/" + fileTypeUpper + "/" + fileTypeUpper + std::to_string(i) + "." + fileType;
-			break;
-		case 2:
-			destDir = basePath + "Pictures/" + fileTypeUpper + "/" + fileTypeUpper + std::to_string(i) + "." + fileType;
-			break;
-		case 3:
-			destDir = basePath + "Videos/" + fileTypeUpper + "/" + fileTypeUpper + std::to_string(i) + "." + fileType;
-			break;
-		}
+		//Creates two directories to be used in copying
+		std::string sourceDir = fileHandler.fullPath.at(h);
+		std::string destDir = fileHandler.pathAppendFileType + fileTypeUpper + "/" + fileTypeUpper + std::to_string(i) + "." + fileHandler.fileType;;
 
 		//The input file
 		std::ifstream src(sourceDir, std::ios::binary);
@@ -76,13 +60,13 @@ void sortFiles(std::vector<std::string> fileFullPath, std::vector<std::string> f
 		dst.close();
 		src.close();
 
-		logFileStore += fileFileNames.at(h) + " was renamed to " + fileTypeUpper + std::to_string(i) + "\n";
+		logFileStore += fileHandler.fileNames.at(h) + " was renamed to " + fileTypeUpper + std::to_string(i) + "\n";
 		totalSorts++;
-		std::cout << "\rSorted " << h + 1 << " " << fileType << "s. " << "(" << totalSorts << " total)";
+		std::cout << "\rSorted " << h + 1 << " " << fileHandler.fileType << "s. " << "(" << totalSorts << " total)";
 	}
 
 	//Rewrites log file
-	std::ofstream outLogFile(logsPath + fileType + "_log.txt");
+	std::ofstream outLogFile(logsPath + fileHandler.fileType + "_log.txt");
 	outLogFile << logFileStore;
 	outLogFile.close();
 	std::cout << "\n";

@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	//Calculates size of the source folder
 	getFolderSize(sourceSize, sourcePath);
 	double sourceSizeDouble = static_cast<double>(sourceSize);
-	std::cout << "Source folder contains " << ((double)(int)((sourceSizeDouble / 1000000000) * 100) / 100 ) << " GB of data\n";
+	std::cout << "Source folder contains " << ((double)(int)((sourceSizeDouble / 1024000000) * 100) / 100 ) << " GB of data\n";
 
 	//Timer ended
 	auto end5 = std::chrono::steady_clock::now();
