@@ -1,7 +1,7 @@
 #pragma once
 #include <chrono>
 #include <iostream>
-#include "programWideVars.h"
+#include "globalVars.h"
 #include <string>
 #include <stdlib.h>
 #include <filesystem>

@@ -5,7 +5,7 @@
 #include <Windows.h>
 #include <iostream>
 
-#include "programWideVars.h"
+#include "globalVars.h"
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
-#include "programWideVars.h"
+#include "globalVars.h"
 #include "fillSourceArray.h"
 #include "FileHandler.h"
 

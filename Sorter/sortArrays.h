@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "programWideVars.h"
+#include "globalVars.h"
 #include "getFileExtension.h"
 #include "FileHandler.h"
 #include <iostream>

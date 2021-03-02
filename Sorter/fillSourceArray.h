@@ -7,7 +7,7 @@
 #include <boost/algorithm/string.hpp>
 #include <filesystem>
 
-#include "programWideVars.h"
+#include "globalVars.h"
 #include "getFileExtension.h"
 #include "sortArrays.h"
 
