@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
 	//Creates an empty vector for file handlers
 	std::vector<FileHandler> fileHandlers;
 
+	//Fills the vector with FileHandlers of each supported type
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
 		fileHandlers.push_back(FileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath, noMaxes));
 	}
@@ -89,5 +90,5 @@ int main(int argc, char* argv[])
 
 	//Exit sequence
 	std::cout << "\nPress any key to exit...";
-	std::getchar();
+	char storeExitChar = getchar();
 }

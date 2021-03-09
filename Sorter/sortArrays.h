@@ -5,30 +5,8 @@
 #include "FileHandler.h"
 #include <iostream>
 
-int getTypeIndex(std::vector<std::string> v, std::string K) {
-	{
-		auto it = find(v.begin(), v.end(), K);
-
-		// If element was found
-		if (it != v.end())
-		{
-			// calculating the index
-			// of K
-			int index = static_cast<int>(it - v.begin());
-			return(index);
-		}
-		else {
-			// If the element is not
-			// present in the vector
-			return(-1);
-		}
-	}
-}
-
 void sortArrays(std::vector<FileHandler> &fileHandlers)
 {
-	//String to hold filetype before the file is sorted into its array
-	std::string fileExt;
 	//Var for the index of the filetype in the 'all-types' array
 	int fileExtIndex;
 	//Intra-loop vars
@@ -39,8 +17,8 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 	// (every file that existed in ../Source/
 	for (int i = 0; i < sourcePathCount; i++)
 	{
-		//Get the file extension of the file
-		fileExt = getFileExtension(sourcePathFilesFullPath.at(i));
+		//String to hold filetype before the file is sorted into its array
+		std::string fileExt = getFileExtension(sourcePathFilesFullPath.at(i));
 
 		// Given the filetype, find which array it should be put in
 		// (if any), add it, then +1 to the count of that filetype
@@ -60,8 +38,8 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 			//Finds the index of the filetype in the vector
 			fileExtIndex = static_cast<int>(std::find(allFileTypes->begin(), allFileTypes->end(), fileExtUpper) - allFileTypes->begin());
 		}
-		//-1 will be returned if the filetype is not sorted
-
+		
+		//If the file type is not in the list, it will be put into SourceUnhandled
 		if (fileExtIndex == (DIF_FILE_TYPES)) {
 
 			//Deals with nested folders or otherwise unsorted files
