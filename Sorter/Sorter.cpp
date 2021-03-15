@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <chrono>
-#include <io.h>
 
 //Custom header files
 #include "sortAll.h"
@@ -32,6 +31,7 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
 		fileHandlers.push_back(FileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath, noMaxes));
 	}
+
 
 	//Timer started
 	auto start = std::chrono::steady_clock::now();

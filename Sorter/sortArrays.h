@@ -30,12 +30,15 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		std::string fileExtUpper;
 		for (auto elem : fileExt) fileExtUpper += std::toupper(elem);
 
+		//Don't sort DLL files or SYS files
+		if (fileExtUpper == "DLL" || fileExtUpper == "SYS") break;
+
 		//Saves calculation time if multiple files in a row have the same file type
 		if (fileExt == lastFileExt) {
 			fileExtIndex = lastIndex;
 		}
 		else {
-			//Finds the index of the filetype in the vector
+			//Finds the index of the filetype in the map
 			fileExtIndex = static_cast<int>(std::find(allFileTypes->begin(), allFileTypes->end(), fileExtUpper) - allFileTypes->begin());
 		}
 		
@@ -43,7 +46,7 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		if (fileExtIndex == (DIF_FILE_TYPES)) {
 
 			//Deals with nested folders or otherwise unsorted files
-			//will dump them into SourceUnhandled
+			//	(Will dump them into SourceUnhandled/)
 
 			//Creates two directory strings to be used in copying
 			std::string sourceDir = sourcePathFilesFullPath.at(i);

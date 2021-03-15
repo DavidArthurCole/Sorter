@@ -7,7 +7,7 @@
 	#include "getExePath.h"
 #endif
 
-//Size used to create an array (aka maximum amount of each file that can be handled in one iteration)
+//Size used to create an array (aka maximum amount of each file type that can be handled in one iteration)
 const int MAX_SIZE = 16384;
 
 // A SET OF THESE WILL NEED TO BE EDITED EVERYTIME A NEW FILETYPE IS ADDED
@@ -16,7 +16,7 @@ const int MAX_SIZE = 16384;
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW PICTURE FILE TYPE:
 const int PIC_FILE_TYPES = 5;
-const std::string picFileTypes[PIC_FILE_TYPES] = { "BMP","JFIF","JPEG","JPG","PNG" };
+const std::string picFileTypes[] = { "BMP","JFIF","JPEG","JPG","PNG" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW VIDEO FILE TYPE:
 const int VID_FILE_TYPES = 8;
