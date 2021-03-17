@@ -8,6 +8,9 @@
 using namespace std::filesystem;
 
 void fillSourceArray(std::string path) {
+
+    startArrayTimer = std::chrono::steady_clock::now();
+
     // Get recursive list of files in source dir
     for (const auto& entry : directory_iterator(path)) {
         if (is_directory(entry)) {

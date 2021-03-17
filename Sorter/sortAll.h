@@ -9,6 +9,9 @@
 
 void sortAll(std::vector<FileHandler> fileHandlers)
 {
+	//Timer
+	auto startSortAll = std::chrono::steady_clock::now();
+
 	//For all different file types
 	for (FileHandler fileHandler : fileHandlers) {
 		//If there are files of that type, sort them
@@ -48,4 +51,9 @@ void sortAll(std::vector<FileHandler> fileHandlers)
 			std::cout << "\n";
 		}
 	}
+
+	//Timer ended
+	auto endSortAll = std::chrono::steady_clock::now();
+	auto durationSortAll = std::chrono::duration_cast<std::chrono::milliseconds>(endSortAll - startSortAll);
+	std::cout << "Sorted " << sourcePathCount << " files/folders in " << float(durationSortAll.count() / 1000.00) << " seconds.\n";
 }

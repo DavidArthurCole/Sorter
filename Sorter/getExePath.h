@@ -5,8 +5,7 @@ using namespace std::filesystem;
 std::string getExePath()
 {
 	//Gets the full path, including the executable name
-	path p = "Sorter.exe";
-	std::string path = absolute(p).string();
+	std::string path = __argv[0];
 	//Replaces \ with / in the path
 	std::replace(path.begin(), path.end(), '\\', '/');
 	//Returns the path without the .exe

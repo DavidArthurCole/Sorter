@@ -15,15 +15,14 @@ class FileHandler {
 	public:
 
 		std::string fileType;
-		//Container points to which folder will contain the file type;
+
+		std::string basePath;
+		std::string pathAppendFileType;
+		//Container points to which folder will contain the file type:
 			// 0 is documents
 			// 1 is audio
 			// 2 is pictures
 			// 3 is videos
-
-		std::string basePath;
-		std::string pathAppendFileType;
-
 		int container;
 		//Current max number of the stored file
 		int currentMax;
@@ -34,22 +33,22 @@ class FileHandler {
 
 		FileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath, bool noMaxes) {
 			//Sets the filetype
-			fileType = passedFileType;
+			this->fileType = passedFileType;
 
 			//Sets the container
-			container = passedContainer;
-			switch (container) {
+			this->container = passedContainer;
+			switch (this->container) {
 			case 0:
-				pathAppendFileType = "Documents/";
+				this->pathAppendFileType = "Documents/";
 				break;
 			case 1:
-				pathAppendFileType = "Audio/";
+				this->pathAppendFileType = "Audio/";
 				break;
 			case 2:
-				pathAppendFileType = "Pictures/";
+				this->pathAppendFileType = "Pictures/";
 				break;
 			case 3:
-				pathAppendFileType = "Videos/";
+				this->pathAppendFileType = "Videos/";
 				break;
 			}
 

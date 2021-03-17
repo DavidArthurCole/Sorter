@@ -5,6 +5,7 @@
 	#include <Windows.h>
 	#include <iostream>
 	#include "getExePath.h"
+	#include "FileHandler.h"
 #endif
 
 //Size used to create an array (aka maximum amount of each file type that can be handled in one iteration)
@@ -64,6 +65,13 @@ void populateAllTypesArray()
 		allFileTypesContainers->push_back(1);
 	}
 }
+
+//Vector of fileHandlers
+std::vector<FileHandler> fileHandlers;
+
+//Total execution timer
+auto startExec = std::chrono::steady_clock::now();
+auto startArrayTimer = std::chrono::steady_clock::now();
 
 //Working directory
 std::string basePath = getExePath();

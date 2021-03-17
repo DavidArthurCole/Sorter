@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "globalVars.h"
+#include "fillSourceArray.h"
 #include "getFileExtension.h"
 #include "FileHandler.h"
 #include <iostream>
@@ -74,4 +74,8 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		lastIndex = fileExtIndex;
 	}
 	if(totalSorts > 0) std::cout << "\n";
+
+	auto endArrayTimer = std::chrono::steady_clock::now();
+	auto arrayTimerDuration = std::chrono::duration_cast<std::chrono::milliseconds>(endArrayTimer - startArrayTimer);
+	std::cout << "Added " << sourcePathCount << " files to internal array " << float(arrayTimerDuration.count() / 1000.00) << " seconds.\n";
 }
