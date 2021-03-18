@@ -10,12 +10,8 @@
 #include "buildFileHandlersVector.h"
 #include "cleanSource.h"
 #include "getFolderSize.h"
-
-//Class for holding filetype pieces
-#include "FileHandler.h"
-
-//Handles input flags
-#include "HandleFlags.h"
+#include "fileHandler.h"
+#include "handleFlags.h"
 
 int main(int argc, char* argv[])
 {

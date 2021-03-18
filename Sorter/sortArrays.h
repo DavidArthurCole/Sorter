@@ -5,13 +5,15 @@
 #include "FileHandler.h"
 #include <iostream>
 
-void sortArrays(std::vector<FileHandler> &fileHandlers)
+void sortArrays(std::vector<fileHandler> &fileHandlers)
 {
 	//Var for the index of the filetype in the 'all-types' array
 	int fileExtIndex;
 	//Intra-loop vars
 	std::string lastFileExt = "";
 	int lastIndex = 0;
+
+	std::string unhandledFiles[100];
 
 	// For every file that was added to the sourceArray
 	// (every file that existed in ../Source/
@@ -44,24 +46,25 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		
 		//If the file type is not in the list, it will be put into SourceUnhandled
 		if (fileExtIndex == (DIF_FILE_TYPES)) {
+			//Don't include folders
+			if (!std::filesystem::is_directory(sourcePathFilesFullPath.at(i))) {
+				//Deals with nested folders or otherwise unsorted files
+				//	(Will dump them into SourceUnhandled/)
 
-			//Deals with nested folders or otherwise unsorted files
-			//	(Will dump them into SourceUnhandled/)
+				//The input file - Any files that are not supported
+				std::ifstream src(sourcePathFilesFullPath.at(i), std::ios::binary);
+				//The output file - If there are duplicate file names, they won't be overwritten (took me way too long to figure this out)
+				std::ofstream dst(basePath + "\nSourceUnhandled\\Unhandled" + std::to_string(totalSorts) + "." + fileExt, std::ios::binary);
 
-			//Creates two directory strings to be used in copying
-			std::string sourceDir = sourcePathFilesFullPath.at(i);
-			std::string destDir = basePath + "SourceUnhandled/" + sourcePathFileNames.at(i);
-			//The input file
-			std::ifstream src(sourceDir, std::ios::binary);
-			//The output file
-			std::ofstream dst(destDir, std::ios::binary);
+				//Copies input to output
+				dst << src.rdbuf();
+				src.close();
+				dst.close();
 
-			//Copies input to output
-			dst << src.rdbuf();
-			src.close();
-			dst.close();
-			totalSorts++;
-			std::cout << "\rSorted " << totalSorts << " unsupported files. " << "(" << totalSorts << " total)";
+				//Increments
+				totalSorts++;
+				std::cout << "\rSorted " << totalSorts << " unsupported files. " << "(" << totalSorts << " total)";
+			}
 		}
 		else {
 			fileHandlers.at(fileExtIndex).fullPath.push_back(sourcePathFilesFullPath.at(i));
@@ -73,9 +76,9 @@ void sortArrays(std::vector<FileHandler> &fileHandlers)
 		lastFileExt = fileExt;
 		lastIndex = fileExtIndex;
 	}
+	
 	if(totalSorts > 0) std::cout << "\n";
 
-	auto endArrayTimer = std::chrono::steady_clock::now();
-	auto arrayTimerDuration = std::chrono::duration_cast<std::chrono::milliseconds>(endArrayTimer - startArrayTimer);
+	auto arrayTimerDuration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startArrayTimer);
 	std::cout << "Added " << sourcePathCount << " files to internal array " << float(arrayTimerDuration.count() / 1000.00) << " seconds.\n";
 }

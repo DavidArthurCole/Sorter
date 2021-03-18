@@ -10,13 +10,15 @@
 
 using namespace std::filesystem;
 
-class FileHandler {	
+class fileHandler {	
 
 	public:
 
+		//Store the fileType (txt, jpg, etc.)
 		std::string fileType;
-
+		//Stores the base path of the program "C:/Path/To/Executable/...(Sorter.exe)" without the executable name
 		std::string basePath;
+		//Essentially the same thing as fileType, but capital
 		std::string pathAppendFileType;
 		//Container points to which folder will contain the file type:
 			// 0 is documents
@@ -31,7 +33,7 @@ class FileHandler {
 
 		std::vector<std::string> fullPath { }, fileNames { };
 
-		FileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath, bool noMaxes) {
+		fileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath, bool noMaxes) {
 			//Sets the filetype
 			this->fileType = passedFileType;
 
@@ -65,6 +67,7 @@ class FileHandler {
 
 		void calcMax(bool noMaxes) {
 
+			//Store is -1 to account for the '+1' when renaming with the int - start at 0
 			int store = -1, compare = 0;
 
 			if (!noMaxes) {
@@ -73,8 +76,6 @@ class FileHandler {
 
 				//Appends the correct container name given the container var
 				std::string pathAppend = this->pathAppendFileType + this->fileType;
-
-
 
 				for (const auto& entry : directory_iterator(this->basePath + pathAppend))
 				{

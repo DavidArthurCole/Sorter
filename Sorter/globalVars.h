@@ -5,7 +5,7 @@
 	#include <Windows.h>
 	#include <iostream>
 	#include "getExePath.h"
-	#include "FileHandler.h"
+	#include "fileHandler.h"
 #endif
 
 //Size used to create an array (aka maximum amount of each file type that can be handled in one iteration)
@@ -36,38 +36,8 @@ const int DIF_FILE_TYPES = PIC_FILE_TYPES + VID_FILE_TYPES + DOC_FILE_TYPES + AU
 std::vector<std::string> allFileTypes[DIF_FILE_TYPES];
 std::vector<int> allFileTypesContainers[DIF_FILE_TYPES];
 
-void populateAllTypesArray()
-{
-	int h = 0;
-
-	//Adds picture file types to the 'all' array
-	for (int i = 0; i < PIC_FILE_TYPES; i++)
-	{
-		allFileTypes->push_back(picFileTypes[i]);
-		allFileTypesContainers->push_back(2);
-	}
-	//Adds video file types to the 'all' array
-	for (int i = 0; i < VID_FILE_TYPES; i++)
-	{
-		allFileTypes->push_back(vidFileTypes[i]);
-		allFileTypesContainers->push_back(3);
-	}
-	//Adds document file types to the 'all' array
-	for (int i = 0; i < DOC_FILE_TYPES; i++)
-	{
-		allFileTypes->push_back(docFileTypes[i]);
-		allFileTypesContainers->push_back(0);
-	}
-	//Adds audio file types to the 'all' array
-	for (int i =0 ; i < AUDIO_FILE_TYPES; i++)
-	{
-		allFileTypes->push_back(audioFileTypes[i]);
-		allFileTypesContainers->push_back(1);
-	}
-}
-
 //Vector of fileHandlers
-std::vector<FileHandler> fileHandlers;
+std::vector<fileHandler> fileHandlers;
 
 //Total execution timer
 auto startExec = std::chrono::steady_clock::now();

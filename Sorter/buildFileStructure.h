@@ -5,7 +5,7 @@
 #include <iostream>
 #include <filesystem>
 
-#include "globalVars.h"
+#include "populateAllTypesArray.h"
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -55,7 +55,7 @@ void buildFileStructure()
 	//	|	  |__ MPG
 	//	|	  |__ WEBM
 	//  |
-	//  |__ Sorter.exe
+	//  |__ Sorter.exe (Me)
 	//=========================
 
 	populateAllTypesArray();

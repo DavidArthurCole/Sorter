@@ -7,13 +7,13 @@
 #include "fillSourceArray.h"
 #include "FileHandler.h"
 
-void sortAll(std::vector<FileHandler> fileHandlers)
+void sortAll(std::vector<fileHandler> fileHandlers)
 {
 	//Timer
 	auto startSortAll = std::chrono::steady_clock::now();
 
 	//For all different file types
-	for (FileHandler fileHandler : fileHandlers) {
+	for (fileHandler fileHandler : fileHandlers) {
 		//If there are files of that type, sort them
 		if (fileHandler.count > 0) {
 			//Stores the current <type> log in a string so it can be appended instead of overwritten
@@ -53,7 +53,6 @@ void sortAll(std::vector<FileHandler> fileHandlers)
 	}
 
 	//Timer ended
-	auto endSortAll = std::chrono::steady_clock::now();
-	auto durationSortAll = std::chrono::duration_cast<std::chrono::milliseconds>(endSortAll - startSortAll);
+	auto durationSortAll = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startSortAll);
 	std::cout << "Sorted " << sourcePathCount << " files/folders in " << float(durationSortAll.count() / 1000.00) << " seconds.\n";
 }

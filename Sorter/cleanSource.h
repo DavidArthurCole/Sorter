@@ -32,7 +32,6 @@ void cleanSource()
 	else if (postClean && freshSource) std::cout << "\nSkipping post-clean as the source was freshly built\n";
 
 	//Total timer ended
-	auto endExec = std::chrono::steady_clock::now();
-	auto durationExec = std::chrono::duration_cast<std::chrono::milliseconds>(endExec - startExec);
+	auto durationExec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startExec);
 	std::cout << "Sorting program completed in " << float(durationExec.count() / 1000.00) << " seconds.\n";
 }
