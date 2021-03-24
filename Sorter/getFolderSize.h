@@ -1,12 +1,16 @@
 #include <filesystem>
+#include "globalVars.h"
 
-void getFolderSize(size_t size, std::string path) {
+void getFolderSize() {
     using namespace std::filesystem;
+
+    //Size_T for source folder size
+    size_t size = 0;
 
     //Timer
     auto folderSizeStart = std::chrono::steady_clock::now();
 
-    for (recursive_directory_iterator it(path);
+    for (recursive_directory_iterator it(sourcePath);
         it != recursive_directory_iterator();
         ++it)
     {

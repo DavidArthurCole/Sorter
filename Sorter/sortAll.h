@@ -7,7 +7,7 @@
 #include "fillSourceArray.h"
 #include "FileHandler.h"
 
-void sortAll(std::vector<fileHandler> fileHandlers)
+void sortAll()
 {
 	//Timer
 	auto startSortAll = std::chrono::steady_clock::now();

@@ -3,9 +3,10 @@
 #include "fillSourceArray.h"
 #include "getFileExtension.h"
 #include "FileHandler.h"
+#include "globalVars.h"
 #include <iostream>
 
-void sortArrays(std::vector<fileHandler> &fileHandlers)
+void sortArrays()
 {
 	//Var for the index of the filetype in the 'all-types' array
 	int fileExtIndex;
@@ -13,7 +14,7 @@ void sortArrays(std::vector<fileHandler> &fileHandlers)
 	std::string lastFileExt = "";
 	int lastIndex = 0;
 
-	std::string unhandledFiles[100];
+	std::string unhandledFiles[MAX_SIZE];
 
 	// For every file that was added to the sourceArray
 	// (every file that existed in ../Source/
@@ -53,8 +54,23 @@ void sortArrays(std::vector<fileHandler> &fileHandlers)
 
 				//The input file - Any files that are not supported
 				std::ifstream src(sourcePathFilesFullPath.at(i), std::ios::binary);
-				//The output file - If there are duplicate file names, they won't be overwritten (took me way too long to figure this out)
-				std::ofstream dst(basePath + "\nSourceUnhandled\\Unhandled" + std::to_string(totalSorts) + "." + fileExt, std::ios::binary);
+
+				std::string fileName = sourcePathFileNames.at(i).substr(0, (sourcePathFileNames.at(i).length() - (fileExt.length() + 1)));
+				std::string destPath = "";
+
+				//The output file - If there are duplicate file names, they won't be overwritten  (took me way too long to figure this out)
+				if (std::filesystem::exists(basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i))) {
+					for (int i = 1; i < MAX_SIZE; i++) {
+						std::string testPath = (basePath + "\\SourceUnhandled\\" + fileName + "(" + std::to_string(i) + ")" + "." + fileExt);
+						if (!std::filesystem::exists(testPath)) {
+							destPath = testPath;
+							i = MAX_SIZE + 1;
+						}
+					}
+				}
+				else destPath = (basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i));
+
+				std::ofstream dst(destPath, std::ios::binary);
 
 				//Copies input to output
 				dst << src.rdbuf();
@@ -63,6 +79,7 @@ void sortArrays(std::vector<fileHandler> &fileHandlers)
 
 				//Increments
 				totalSorts++;
+				//NEEDS A \r AT THE BEGINNING
 				std::cout << "\rSorted " << totalSorts << " unsupported files. " << "(" << totalSorts << " total)";
 			}
 		}

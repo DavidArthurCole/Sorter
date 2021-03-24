@@ -22,17 +22,17 @@ int main(int argc, char* argv[])
 	buildFileStructure();
 
 	//Fills the fileHandlers vector with new instances
-	buildFileHandlersVector(fileHandlers);
+	buildFileHandlersVector();
 
 	//Adds files into arrays to be sorted
 	fillSourceArray(sourcePath);
-	sortArrays(fileHandlers);
+	sortArrays();
 
 	//Calculates size of the source folder
-	getFolderSize(sourceSize, sourcePath);
+	getFolderSize();
 
 	//Sorts all files (including folders)
-	sortAll(fileHandlers);
+	sortAll();
 
 	//Cleans source if the flag was passed
 	cleanSource();

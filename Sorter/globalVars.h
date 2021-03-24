@@ -67,10 +67,8 @@ int totalSorts = 0;
 //Random boolean logic to prevent removing a freshly generated sourcedir
 bool freshSource = false;
 
+//Flags that can be set, default is false
 bool postClean = false;
 bool noMaxes = false;
-
-//Size_T for source folder size
-size_t sourceSize;
 
 #endif
