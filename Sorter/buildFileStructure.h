@@ -23,6 +23,7 @@ void buildFileStructure()
 	//	|	  |__ PPT
 	//	|	  |__ PPTX
 	//	|	  |__ PST
+	//  |     |__ TXT
 	//	|	  |__ XLS
 	//	|	  |__ XLSX
 	//  |

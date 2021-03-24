@@ -24,8 +24,8 @@ const int VID_FILE_TYPES = 8;
 const std::string vidFileTypes[VID_FILE_TYPES] = { "AVI", "FLV","GIF","MKV","MOV","MP4","MPG", "WEBM" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW DOCUMENT FILE TYPE:
-const int DOC_FILE_TYPES = 8;
-const std::string docFileTypes[DOC_FILE_TYPES] = { "DOC", "DOCX", "PDF", "PPT", "PPTX","PST","XLS","XLSX" };
+const int DOC_FILE_TYPES = 9;
+const std::string docFileTypes[DOC_FILE_TYPES] = { "DOC", "DOCX", "PDF", "PPT", "PPTX","PST","TXT","XLS","XLSX" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW AUDIO FILE TYPE:
 const int AUDIO_FILE_TYPES = 4;
