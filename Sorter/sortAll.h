@@ -6,6 +6,7 @@
 #include "globalVars.h"
 #include "fillSourceArray.h"
 #include "FileHandler.h"
+#include "getFileName.h"
 
 void sortAll()
 {
@@ -16,21 +17,38 @@ void sortAll()
 	for (fileHandler fileHandler : fileHandlers) {
 		//If there are files of that type, sort them
 		if (fileHandler.count > 0) {
-			//Stores the current <type> log in a string so it can be appended instead of overwritten
-			std::ifstream inLogFile(logsPath + fileHandler.fileType + "_log.txt");
-			std::string logFileStore((std::istreambuf_iterator<char>(inLogFile)), (std::istreambuf_iterator<char>()));
-			inLogFile.close();
 
-			//Differentiation between array index and current max number
-			//Use h for referencing the array(s).
-			int h = 0;
+			//Initial print
 			std::cout << "Sorted 0 " << fileHandler.fileType << "s.";
-			for (int i = fileHandler.currentMax; i < (fileHandler.currentMax + fileHandler.count); i++, h++)
+			for (int i = 0; i < (fileHandler.count); i++)
 			{
 				//The input file
-				std::ifstream src(fileHandler.fullPath.at(h), std::ios::binary);
+				std::ifstream src(fileHandler.fullPath.at(i), std::ios::binary);
+
+				std::string fileName = getFileName(fileHandler.fileNames.at(i), fileHandler.fileType);
+				std::string checkPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + "." + fileHandler.fileType;
+				std::string newName = "";
+
+				boolean renamed = false;
+				int holdJ = 0;
+
+				if (!std::filesystem::exists(checkPath)) {
+					newName = checkPath;
+				}
+				else {
+					for (int j = 1; j < MAX_SIZE; j++) {
+						std::string testPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName +  " (" + std::to_string(j) + ")" + "." + fileHandler.fileType;
+						if (!std::filesystem::exists(testPath)) {
+							newName = testPath;
+							holdJ = j;
+							renamed = true;
+							j = MAX_SIZE + 1;
+						}
+					}
+				}
+
 				//The output file
-				std::ofstream dst(fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileHandler.fileType + std::to_string(i) + "." + fileHandler.fileType, std::ios::binary);
+				std::ofstream dst(newName, std::ios::binary);
 
 				//Copies input to output
 				dst << src.rdbuf();
@@ -39,15 +57,9 @@ void sortAll()
 				dst.close();
 				src.close();
 
-				logFileStore += fileHandler.fileNames.at(h) + " was renamed to " + fileHandler.fileType + std::to_string(i) + "\n";
 				totalSorts++;
-				std::cout << "\rSorted " << h + 1 << " " << fileHandler.fileType << "s. " << "(" << totalSorts << " total)";
+				std::cout << "\rSorted " << i + 1 << " " << fileHandler.fileType << "s. " << "(" << totalSorts << " total)";
 			}
-
-			//Rewrites log file
-			std::ofstream outLogFile(logsPath + fileHandler.fileType + "_log.txt");
-			outLogFile << logFileStore;
-			outLogFile.close();
 			std::cout << "\n";
 		}
 	}

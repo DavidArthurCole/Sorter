@@ -49,9 +49,6 @@ std::string basePath = getExePath();
 //Files that need to be sorted
 std::string sourcePath = basePath + "Source";
 
-//Path to log files
-std::string logsPath = basePath + "Logs/";
-
 //Stores all files that need to be sorted as a path
 std::vector<std::string> sourcePathFilesFullPath;
 

@@ -14,8 +14,10 @@ class fileHandler {
 
 	public:
 
-		//Store the fileType (txt, jpg, etc.)
+		//Store the fileType (TXT, JPG, etc.)
 		std::string fileType;
+		//Store the fileType in lowercase
+		std::string fileTypeLower;
 		//Stores the base path of the program "C:/Path/To/Executable/...(Sorter.exe)" without the executable name
 		std::string basePath;
 		//Essentially the same thing as fileType, but capital
@@ -36,6 +38,9 @@ class fileHandler {
 		fileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath, bool noMaxes) {
 			//Sets the filetype
 			this->fileType = passedFileType;
+
+			//Creates the lowercase
+			for (auto elem : this->fileType) fileTypeLower += std::tolower(elem);
 
 			//Sets the container
 			this->container = passedContainer;
@@ -71,9 +76,6 @@ class fileHandler {
 			int store = 0, compare = 0;
 
 			if (!noMaxes) {
-				//For use in the file searching
-				int amtToSubtract = static_cast<int>(this->fileType.length());
-
 				//Appends the correct container name given the container var
 				std::string pathAppend = this->pathAppendFileType + this->fileType;
 
@@ -82,20 +84,7 @@ class fileHandler {
 					// Does not look through names of pre-existing folders
 					// Without this check, the program will violently crash
 					// every time it comes across a folder in a source dir
-					if (!is_directory(entry))
-					{
-						//Gets the name of a file (ex: "PNG1234")
-						std::string filePath = entry.path().filename().string();
-
-						//Gets only the numerical value from the name (ex: 1234)
-						compare = std::stoi(filePath.substr(amtToSubtract, (filePath.length() - amtToSubtract)));
-
-						// If the current filename is larger than store, replace store
-						if (compare > store)
-						{
-							store = compare;
-						}
-					}
+					if (!is_directory(entry)) this->currentMax++;
 				}
 			}
 			//Stores the currentMax in the var

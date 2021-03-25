@@ -34,7 +34,7 @@ void sortArrays()
 		for (auto elem : fileExt) fileExtUpper += std::toupper(elem);
 
 		//Don't sort DLL files or SYS files
-		if (fileExtUpper == "DLL" || fileExtUpper == "SYS") break;
+		if (fileExtUpper == "DLL" || fileExtUpper == "SYS" || fileExtUpper == "BIN") break;
 
 		//Saves calculation time if multiple files in a row have the same file type
 		if (fileExt == lastFileExt) {
@@ -61,10 +61,10 @@ void sortArrays()
 				//The output file - If there are duplicate file names, they won't be overwritten  (took me way too long to figure this out)
 				if (std::filesystem::exists(basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i))) {
 					for (int i = 1; i < MAX_SIZE; i++) {
-						std::string testPath = (basePath + "\\SourceUnhandled\\" + fileName + "(" + std::to_string(i) + ")" + "." + fileExt);
+						std::string testPath = (basePath + "\\SourceUnhandled\\" + fileName + " (" + std::to_string(i) + ")" + "." + fileExt);
 						if (!std::filesystem::exists(testPath)) {
 							destPath = testPath;
-							i = MAX_SIZE + 1;
+							break;
 						}
 					}
 				}

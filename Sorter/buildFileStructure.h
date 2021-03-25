@@ -27,8 +27,6 @@ void buildFileStructure()
 	//	|	  |__ XLS
 	//	|	  |__ XLSX
 	//  |
-	//  |__ Logs (One log file for each file type is generated in this folder)
-	//  |
 	//  |__ Audio
 	//  |     |__ FLAC
 	//	|	  |__ M4A
@@ -62,8 +60,8 @@ void buildFileStructure()
 	populateAllTypesArray();
 
 	//All folders and subfolders that need to be created
-	const char *baseFolderStructure[7] = 
-	{ "Documents\\", "Logs\\", "Audio\\", "Pictures\\", "Videos\\", "Source\\", "SourceUnhandled\\"};
+	const char *baseFolderStructure[6] = 
+	{ "Documents\\", "Audio\\", "Pictures\\", "Videos\\", "Source\\", "SourceUnhandled\\"};
 
 	if (!exists("Source\\")) {
 		SetConsoleTextAttribute(hConsole, 12);
@@ -97,28 +95,5 @@ void buildFileStructure()
 	for (int i = 0; i < DOC_FILE_TYPES; i++) {
 		std::string folderPath = "Documents\\" + docFileTypes[i];
 		if (!exists(folderPath)) create_directory(folderPath);
-	}
-
-	//For each filetype, create its respective log
-	for (int i = 0; i < DIF_FILE_TYPES ; i++) {
-	
-		std::locale loc;
-		std::string logPath = "Logs\\";
-		for (auto elem : allFileTypes->at(i)) {
-			logPath += std::tolower(elem, loc);
-		}
-		logPath += "_log.txt";
-
-		std::fstream fileStream;
-		fileStream.open(logPath);
-		if (fileStream.fail()) {
-			//Creates the log as an empty file, and closest it
-			std::ofstream createLog(logPath);
-			createLog << "";
-			createLog.close();
-		}
-		//Reset for next pass
-		fileStream.clear();
-		fileStream.close();
 	}
 }
