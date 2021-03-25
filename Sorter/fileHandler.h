@@ -16,8 +16,6 @@ class fileHandler {
 
 		//Store the fileType (TXT, JPG, etc.)
 		std::string fileType;
-		//Store the fileType in lowercase
-		std::string fileTypeLower;
 		//Stores the base path of the program "C:/Path/To/Executable/...(Sorter.exe)" without the executable name
 		std::string basePath;
 		//Essentially the same thing as fileType, but capital
@@ -38,9 +36,6 @@ class fileHandler {
 		fileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath, bool noMaxes) {
 			//Sets the filetype
 			this->fileType = passedFileType;
-
-			//Creates the lowercase
-			for (auto elem : this->fileType) fileTypeLower += std::tolower(elem);
 
 			//Sets the container
 			this->container = passedContainer;

@@ -60,7 +60,8 @@ void buildFileStructure()
 	populateAllTypesArray();
 
 	//All folders and subfolders that need to be created
-	const char *baseFolderStructure[6] = 
+	const int folderStructCount = 6;
+	const char *baseFolderStructure[folderStructCount] = 
 	{ "Documents\\", "Audio\\", "Pictures\\", "Videos\\", "Source\\", "SourceUnhandled\\"};
 
 	if (!exists("Source\\")) {
@@ -71,7 +72,7 @@ void buildFileStructure()
 	}
 		
 	//Creates base folders
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < folderStructCount; i++) {
 		// If the folder doesn't exist
 		if (!exists(baseFolderStructure[i])) create_directory(baseFolderStructure[i]);
 	}
