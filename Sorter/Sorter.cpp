@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 
 	//Sorts all files (including folders)
 	sortAll();
-
+	
 	//Cleans source if the flag was passed
 	cleanSource();
 

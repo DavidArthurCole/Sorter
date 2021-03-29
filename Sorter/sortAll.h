@@ -2,66 +2,76 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <thread>
 
 #include "globalVars.h"
 #include "fillSourceArray.h"
 #include "FileHandler.h"
 #include "getFileName.h"
 
+void sort(fileHandler fileHandler) {
+
+	//If there are files of that type, sort them
+	if (fileHandler.count > 0) {
+		//Initial print
+		std::cout << "Starting to sort " << fileHandler.count << " " << fileHandler.fileType << "s.\n";
+		for (int i = 0; i < (fileHandler.count); i++)
+		{	
+			//The input file
+			std::ifstream src(fileHandler.fullPath.at(i), std::ios::binary);
+
+			std::string fileName = getFileName(fileHandler.fileNames.at(i), fileHandler.fileType);
+			std::string checkPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + "." + fileHandler.fileType;
+			std::string newName = "";
+
+			boolean renamed = false;
+			int holdJ = 0;
+
+			if (!std::filesystem::exists(checkPath)) {
+				newName = checkPath;
+			}
+			else {
+				for (int j = 1; j < MAX_SIZE; j++) {
+					std::string testPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + " (" + std::to_string(j) + ")" + "." + fileHandler.fileType;
+					if (!std::filesystem::exists(testPath)) {
+						newName = testPath;
+						holdJ = j;
+						renamed = true;
+						j = MAX_SIZE + 1;
+					}
+				}
+			}
+
+			//The output file
+			std::ofstream dst(newName, std::ios::binary);
+
+			//Copies input to output
+			dst << src.rdbuf();
+
+			//Precaution to avoid mem overflow
+			dst.close();
+			src.close();
+		}
+		std::cout << "Finished sorting " << fileHandler.count << " " << fileHandler.fileType << "s.\n";
+	}
+}
+
 void sortAll()
 {
 	//Timer
 	auto startSortAll = std::chrono::steady_clock::now();
 
-	//For all different file types
+	//Holds the threads for each type
+	std::vector<std::thread> sorterThreads;
+
+	//For all different file types, create a new thread
 	for (fileHandler fileHandler : fileHandlers) {
-		//If there are files of that type, sort them
-		if (fileHandler.count > 0) {
+		sorterThreads.push_back(std::thread(sort, fileHandler));
+	}
 
-			//Initial print
-			std::cout << "Sorted 0 " << fileHandler.fileType << "s.";
-			for (int i = 0; i < (fileHandler.count); i++)
-			{
-				//The input file
-				std::ifstream src(fileHandler.fullPath.at(i), std::ios::binary);
-
-				std::string fileName = getFileName(fileHandler.fileNames.at(i), fileHandler.fileType);
-				std::string checkPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + "." + fileHandler.fileType;
-				std::string newName = "";
-
-				boolean renamed = false;
-				int holdJ = 0;
-
-				if (!std::filesystem::exists(checkPath)) {
-					newName = checkPath;
-				}
-				else {
-					for (int j = 1; j < MAX_SIZE; j++) {
-						std::string testPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName +  " (" + std::to_string(j) + ")" + "." + fileHandler.fileType;
-						if (!std::filesystem::exists(testPath)) {
-							newName = testPath;
-							holdJ = j;
-							renamed = true;
-							j = MAX_SIZE + 1;
-						}
-					}
-				}
-
-				//The output file
-				std::ofstream dst(newName, std::ios::binary);
-
-				//Copies input to output
-				dst << src.rdbuf();
-
-				//Precaution to avoid mem overflow
-				dst.close();
-				src.close();
-
-				totalSorts++;
-				std::cout << "\rSorted " << i + 1 << " " << fileHandler.fileType << "s. " << "(" << totalSorts << " total)";
-			}
-			std::cout << "\n";
-		}
+	//Run the threads
+	for (auto& thread : sorterThreads) {
+		thread.join();
 	}
 
 	//Timer ended
