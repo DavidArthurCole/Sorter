@@ -14,8 +14,6 @@ void sortArrays()
 	std::string lastFileExt = "";
 	int lastIndex = 0;
 
-	std::string unhandledFiles[MAX_SIZE];
-
 	// For every file that was added to the sourceArray
 	// (every file that existed in ../Source/
 	for (int i = 0; i < sourcePathCount; i++)
@@ -44,7 +42,7 @@ void sortArrays()
 			//Finds the index of the filetype in the map
 			fileExtIndex = static_cast<int>(std::find(allFileTypes->begin(), allFileTypes->end(), fileExtUpper) - allFileTypes->begin());
 		}
-		
+
 		//If the file type is not in the list, it will be put into SourceUnhandled
 		if (fileExtIndex == (DIF_FILE_TYPES)) {
 			//Don't include folders
@@ -60,7 +58,7 @@ void sortArrays()
 
 				//The output file - If there are duplicate file names, they won't be overwritten  (took me way too long to figure this out)
 				if (std::filesystem::exists(basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i))) {
-					for (int i = 1; i < MAX_SIZE; i++) {
+					for (int i = 1; i < MAX_SIZE / 32; i++) {
 						std::string testPath = (basePath + "\\SourceUnhandled\\" + fileName + " (" + std::to_string(i) + ")" + "." + fileExt);
 						if (!std::filesystem::exists(testPath)) {
 							destPath = testPath;
@@ -79,8 +77,8 @@ void sortArrays()
 
 				//Increments
 				totalSorts++;
-				//NEEDS A \r AT THE BEGINNING
-				std::cout << "\rSorted " << totalSorts << " unsupported files. " << "(" << totalSorts << " total)";
+				//NEEDS A \r AT THE BEGINNING to overwrite the last print, extra spaces are to deal with all of the threads running at once
+				std::cout << "\rSorted " << totalSorts << " unsupported files. " << "(" << totalSorts << " total)                                                                                                       ";
 			}
 		}
 		else {
@@ -93,8 +91,8 @@ void sortArrays()
 		lastFileExt = fileExt;
 		lastIndex = fileExtIndex;
 	}
-	
-	if(totalSorts > 0) std::cout << "\n";
+
+	if (totalSorts > 0) std::cout << "\n";
 
 	auto arrayTimerDuration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startArrayTimer);
 	std::cout << "Added " << sourcePathCount << " files to internal array " << float(arrayTimerDuration.count() / 1000.00) << " seconds.\n";

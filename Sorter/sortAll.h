@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -14,9 +15,8 @@ void sort(fileHandler fileHandler) {
 	//If there are files of that type, sort them
 	if (fileHandler.count > 0) {
 		//Initial print
-		std::cout << "Starting to sort " << fileHandler.count << " " << fileHandler.fileType << "s.\n";
 		for (int i = 0; i < (fileHandler.count); i++)
-		{	
+		{
 			//The input file
 			std::ifstream src(fileHandler.fullPath.at(i), std::ios::binary);
 
@@ -51,8 +51,10 @@ void sort(fileHandler fileHandler) {
 			//Precaution to avoid mem overflow
 			dst.close();
 			src.close();
+
+			totalSorts++;
+			std::cout << "\r\rSorting... (" << std::to_string(totalSorts) << " / " << std::to_string(sourcePathCount) << ")";
 		}
-		std::cout << "Finished sorting " << fileHandler.count << " " << fileHandler.fileType << "s.\n";
 	}
 }
 

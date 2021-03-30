@@ -2,10 +2,10 @@
 #ifndef GLOBAL_VARS_HEADER
 #define GLOBAL_VARS_HEADER
 #ifndef INCLUDES
-	#include <Windows.h>
-	#include <iostream>
-	#include "getExePath.h"
-	#include "fileHandler.h"
+#include <Windows.h>
+#include <iostream>
+#include "getExePath.h"
+#include "fileHandler.h"
 #endif
 
 //Size used to create an array (aka maximum amount of each file type that can be handled in one iteration)
@@ -20,8 +20,8 @@ const int PIC_FILE_TYPES = 5;
 const std::string picFileTypes[] = { "BMP","JFIF","JPEG","JPG","PNG" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW VIDEO FILE TYPE:
-const int VID_FILE_TYPES = 8;
-const std::string vidFileTypes[VID_FILE_TYPES] = { "AVI", "FLV","GIF","MKV","MOV","MP4","MPG", "WEBM" };
+const int VID_FILE_TYPES = 9;
+const std::string vidFileTypes[VID_FILE_TYPES] = { "AVI", "FLV","GIF","M4V","MKV","MOV","MP4","MPG", "WEBM" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW DOCUMENT FILE TYPE:
 const int DOC_FILE_TYPES = 9;

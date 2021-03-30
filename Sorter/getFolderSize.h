@@ -9,14 +9,19 @@ void getFolderSize() {
 
     //Timer
     auto folderSizeStart = std::chrono::steady_clock::now();
-
-    for (recursive_directory_iterator it(sourcePath);
-        it != recursive_directory_iterator();
-        ++it)
-    {
-        if (!is_directory(*it))
-            size += file_size(*it);
+    try {
+        for (recursive_directory_iterator it(sourcePath);
+            it != recursive_directory_iterator();
+            ++it)
+        {
+            if (!is_directory(*it))
+                size += file_size(*it);
+        }
     }
+    catch (std::exception e) {
+        std::cout << e.what() << "\n";
+    }
+    
 
     //Casts the size to a double
     double sourceSizeDouble = static_cast<double>(size);

@@ -31,8 +31,7 @@ void fillSourceArray(std::string path) {
             }
         }
         catch (std::exception e) {
-            std::cout << e.what() << "\n";
-            std::cout << "Entry name: " << entry.path().string() << "\n";
-        }   
+            //Completely unsupported file (bad ascii chars, broken file type, etc.)
+        }
     }
 }

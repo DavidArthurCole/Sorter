@@ -61,8 +61,8 @@ void buildFileStructure()
 
 	//All folders and subfolders that need to be created
 	const int folderStructCount = 6;
-	const char *baseFolderStructure[folderStructCount] = 
-	{ "Documents\\", "Audio\\", "Pictures\\", "Videos\\", "Source\\", "SourceUnhandled\\"};
+	const char* baseFolderStructure[folderStructCount] =
+	{ "Documents\\", "Audio\\", "Pictures\\", "Videos\\", "Source\\", "SourceUnhandled\\" };
 
 	if (!exists("Source\\")) {
 		SetConsoleTextAttribute(hConsole, 12);
@@ -70,7 +70,7 @@ void buildFileStructure()
 		SetConsoleTextAttribute(hConsole, 15);
 		freshSource = true;
 	}
-		
+
 	//Creates base folders
 	for (int i = 0; i < folderStructCount; i++) {
 		// If the folder doesn't exist

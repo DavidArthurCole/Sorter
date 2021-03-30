@@ -2,7 +2,7 @@
 #include <string>
 #include <filesystem>
 using namespace std::filesystem;
-std::string getExePath(){
+std::string getExePath() {
 	//Gets the full path, including the executable name
 	std::string path = __argv[0];
 	//Replaces \ with / in the path

@@ -29,11 +29,11 @@ int main(int argc, char* argv[])
 	sortArrays();
 
 	//Calculates size of the source folder
-	getFolderSize();
+	//getFolderSize();
 
 	//Sorts all files (including folders)
 	sortAll();
-	
+
 	//Cleans source if the flag was passed
 	cleanSource();
 
