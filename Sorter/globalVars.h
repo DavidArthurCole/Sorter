@@ -68,4 +68,7 @@ bool freshSource = false;
 bool postClean = false;
 bool noMaxes = false;
 
+//Used in sortAll.h
+boolean consoleBusy = false;
+
 #endif

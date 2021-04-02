@@ -10,6 +10,8 @@
 #include "FileHandler.h"
 #include "getFileName.h"
 
+void tryConsolePrint();
+
 void sort(fileHandler fileHandler) {
 
 	//If there are files of that type, sort them
@@ -53,8 +55,16 @@ void sort(fileHandler fileHandler) {
 			src.close();
 
 			totalSorts++;
-			std::cout << "\r\rSorting... (" << std::to_string(totalSorts) << " / " << std::to_string(sourcePathCount) << ")";
+			tryConsolePrint();
 		}
+	}
+}
+
+void tryConsolePrint() {
+	if (!consoleBusy) {
+		consoleBusy = true;
+		std::cout << "\r\rSorting... (" << std::to_string(totalSorts) << " / " << std::to_string(sourcePathCount) << ")";
+		consoleBusy = false;
 	}
 }
 
