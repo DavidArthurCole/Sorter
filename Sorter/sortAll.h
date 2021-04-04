@@ -4,13 +4,14 @@
 #include <string>
 #include <fstream>
 #include <thread>
+#include <mutex>
 
 #include "globalVars.h"
 #include "fillSourceArray.h"
 #include "FileHandler.h"
 #include "getFileName.h"
 
-void tryConsolePrint();
+std::mutex mtx;
 
 void sort(fileHandler fileHandler) {
 
@@ -55,16 +56,12 @@ void sort(fileHandler fileHandler) {
 			src.close();
 
 			totalSorts++;
-			tryConsolePrint();
-		}
-	}
-}
 
-void tryConsolePrint() {
-	if (!consoleBusy) {
-		consoleBusy = true;
-		std::cout << "\r\rSorting... (" << std::to_string(totalSorts) << " / " << std::to_string(sourcePathCount) << ")";
-		consoleBusy = false;
+			//So that multiple threads to not overlap their outputs
+			mtx.lock();
+			std::cout << "\r\rSorting... (" << std::to_string(totalSorts) << " / " << std::to_string(sourcePathCount) << ")";
+			mtx.unlock();
+		}
 	}
 }
 
