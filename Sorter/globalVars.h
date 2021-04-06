@@ -71,4 +71,7 @@ bool noMaxes = false;
 //Used in sortAll.h
 boolean consoleBusy = false;
 
+//Used in duplicateDetector
+std::string replaceReg = "%FILL_INT_HERE%";
+
 #endif

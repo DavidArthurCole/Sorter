@@ -11,6 +11,7 @@
 #include "cleanSource.h"
 #include "getFolderSize.h"
 #include "fileHandler.h"
+#include "getFileName.h"
 #include "handleFlags.h"
 
 int main(int argc, char* argv[])
@@ -29,7 +30,7 @@ int main(int argc, char* argv[])
 	sortArrays();
 
 	//Calculates size of the source folder
-	//getFolderSize();
+	getFolderSize();
 
 	//Sorts all files (including folders)
 	sortAll();

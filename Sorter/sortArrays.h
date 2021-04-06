@@ -2,6 +2,7 @@
 #include <string>
 #include "fillSourceArray.h"
 #include "getFileExtension.h"
+#include "getFileName.h"
 #include "FileHandler.h"
 #include "globalVars.h"
 #include <iostream>
@@ -53,20 +54,14 @@ void sortArrays()
 				//The input file - Any files that are not supported
 				std::ifstream src(sourcePathFilesFullPath.at(i), std::ios::binary);
 
-				std::string fileName = sourcePathFileNames.at(i).substr(0, (sourcePathFileNames.at(i).length() - (fileExt.length() + 1)));
-				std::string destPath = "";
-
-				//The output file - If there are duplicate file names, they won't be overwritten  (took me way too long to figure this out)
-				if (std::filesystem::exists(basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i))) {
-					for (int i = 1; i < MAX_SIZE / 32; i++) {
-						std::string testPath = (basePath + "\\SourceUnhandled\\" + fileName + " (" + std::to_string(i) + ")" + "." + fileExt);
-						if (!std::filesystem::exists(testPath)) {
-							destPath = testPath;
-							break;
-						}
-					}
-				}
-				else destPath = (basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i));
+				//Grabs the filename
+				std::string fileName = getFileName(sourcePathFileNames.at(i), fileExtUpper);
+				//Creates a theoretical path for th file
+				std::string checkPath = basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i);
+				//Creates an alternate path incase a file with the same path already exists
+				std::string alternatePath = basePath + "\\SourceUnhandled\\" + fileName + " (%FILL_INT_HERE%)" + "." + fileExt;
+				//Function will decide which (checkPath or alternatePath) to use
+				std::string destPath = duplicateDetector(checkPath, alternatePath);
 
 				std::ofstream dst(destPath, std::ios::binary);
 

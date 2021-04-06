@@ -6,6 +6,7 @@
 #include <filesystem>
 
 #include "populateAllTypesArray.h"
+#include "globalVars.h"
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -54,7 +55,7 @@ void buildFileStructure()
 	//	|	  |__ MPG
 	//	|	  |__ WEBM
 	//  |
-	//  |__ Sorter.exe (Me)
+	//  |__ Sorter.exe (Self)
 	//=========================
 
 	populateAllTypesArray();
@@ -77,24 +78,18 @@ void buildFileStructure()
 		if (!exists(baseFolderStructure[i])) create_directory(baseFolderStructure[i]);
 	}
 
-	//Creates video sub folders
-	for (int i = 0; i < VID_FILE_TYPES; i++) {
-		std::string folderPath = "Videos\\" + vidFileTypes[i];
-		if (!exists(folderPath)) create_directory(folderPath);
+
+	for (size_t i = 0; i < allFileTypes->size(); i++) {
+		//Grabs a file extension from the list
+		std::string fileType = allFileTypes->at(i);
+		//Determines which subcategory the extension fits
+		if (vidFileTypes->find(fileType) != std::string::npos) fileType = "Videos\\" + vidFileTypes[i];
+		else if (picFileTypes->find(fileType) != std::string::npos) fileType = "Pictures\\" + picFileTypes[i];
+		else if (audioFileTypes->find(fileType) != std::string::npos) fileType = "Audio\\" + audioFileTypes[i];
+		else if (docFileTypes->find(fileType) != std::string::npos) fileType = "Documents\\" + docFileTypes[i];
+
+		//If the folder doesn't exist, create it
+		if (!exists(fileType)) create_directory(fileType);
 	}
-	//Creates picture sub folders
-	for (int i = 0; i < PIC_FILE_TYPES; i++) {
-		std::string folderPath = "Pictures\\" + picFileTypes[i];
-		if (!exists(folderPath)) create_directory(folderPath);
-	}
-	//Creates audio sub folders
-	for (int i = 0; i < AUDIO_FILE_TYPES; i++) {
-		std::string folderPath = "Audio\\" + audioFileTypes[i];
-		if (!exists(folderPath)) create_directory(folderPath);
-	}
-	//Creates document sub folders
-	for (int i = 0; i < DOC_FILE_TYPES; i++) {
-		std::string folderPath = "Documents\\" + docFileTypes[i];
-		if (!exists(folderPath)) create_directory(folderPath);
-	}
+
 }

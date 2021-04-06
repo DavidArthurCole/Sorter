@@ -67,7 +67,6 @@ public:
 
 	void calcMax(bool noMaxes) {
 
-		//Store is -1 to account for the '+1' when renaming with the int - start at 0
 		int store = 0, compare = 0;
 
 		if (!noMaxes) {

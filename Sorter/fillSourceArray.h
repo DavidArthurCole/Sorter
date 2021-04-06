@@ -7,7 +7,7 @@
 
 using namespace std::filesystem;
 
-void fillSourceArray(std::string path) {
+void fillSourceArray(std::string path)  {
 
     startArrayTimer = std::chrono::steady_clock::now();
 

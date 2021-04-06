@@ -4,7 +4,6 @@
 void populateAllTypesArray()
 {
 	int h = 0;
-
 	//Adds picture file types to the 'all' array
 	for (int i = 0; i < PIC_FILE_TYPES; i++)
 	{

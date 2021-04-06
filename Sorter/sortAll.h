@@ -10,6 +10,7 @@
 #include "fillSourceArray.h"
 #include "FileHandler.h"
 #include "getFileName.h"
+#include "duplicateDetector.h"
 
 std::mutex mtx;
 
@@ -17,33 +18,20 @@ void sort(fileHandler fileHandler) {
 
 	//If there are files of that type, sort them
 	if (fileHandler.count > 0) {
-		//Initial print
+		//Iterates through the files
 		for (int i = 0; i < (fileHandler.count); i++)
 		{
 			//The input file
 			std::ifstream src(fileHandler.fullPath.at(i), std::ios::binary);
 
+			//Grabs the file's name
 			std::string fileName = getFileName(fileHandler.fileNames.at(i), fileHandler.fileType);
+			//Creates a path for the file
 			std::string checkPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + "." + fileHandler.fileType;
-			std::string newName = "";
-
-			boolean renamed = false;
-			int holdJ = 0;
-
-			if (!std::filesystem::exists(checkPath)) {
-				newName = checkPath;
-			}
-			else {
-				for (int j = 1; j < MAX_SIZE; j++) {
-					std::string testPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + " (" + std::to_string(j) + ")" + "." + fileHandler.fileType;
-					if (!std::filesystem::exists(testPath)) {
-						newName = testPath;
-						holdJ = j;
-						renamed = true;
-						j = MAX_SIZE + 1;
-					}
-				}
-			}
+			//Creates the alternate path, incase a file with the same name exists
+			std::string alternatePath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + " (%FILL_INT_HERE%)" + "." + fileHandler.fileType;
+			//Function will decide what the file is named
+			std::string newName = duplicateDetector(checkPath, alternatePath);
 
 			//The output file
 			std::ofstream dst(newName, std::ios::binary);
