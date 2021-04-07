@@ -73,7 +73,7 @@ void sortArrays()
 				//Increments
 				totalSorts++;
 				//NEEDS A \r AT THE BEGINNING to overwrite the last print, extra spaces are to deal with all of the threads running at once
-				std::cout << "\rSorted " << totalSorts << " unsupported files. " << "(" << totalSorts << " total)                                                                                                       ";
+				std::cout << "\rSorted " << totalSorts << " unsupported files. " << "(" << totalSorts << " total)";
 			}
 		}
 		else {

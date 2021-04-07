@@ -7,7 +7,7 @@
 
 using namespace std::filesystem;
 
-void fillSourceArray(std::string path)  {
+void fillSourceArray(std::string path) {
 
     startArrayTimer = std::chrono::steady_clock::now();
 
@@ -27,11 +27,9 @@ void fillSourceArray(std::string path)  {
                 sourcePathFileNames.push_back(str.substr(int((str.find_last_of("\\")) + 1), str.length() - int((str.find_last_of("\\")) + 1)));
 
                 //Increments number of source files
-                sourcePathCount++;
+                sourcePathCount++;     
             }
         }
-        catch (std::exception e) {
-            //Completely unsupported file (bad ascii chars, broken file type, etc.)
-        }
+        catch (std::exception e) {/* Only happens when files/folder names have non ascii-mappable chars*/};
     }
 }
