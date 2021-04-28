@@ -4,6 +4,9 @@
 #ifndef INCLUDES
 #include <Windows.h>
 #include <iostream>
+#include <string>
+#include <vector>
+#include <filesystem>
 #include "getExePath.h"
 #include "fileHandler.h"
 #endif

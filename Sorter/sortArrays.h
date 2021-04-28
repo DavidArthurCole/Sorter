@@ -1,11 +1,10 @@
 #pragma once
-#include <string>
 #include "fillSourceArray.h"
 #include "getFileExtension.h"
 #include "getFileName.h"
 #include "FileHandler.h"
+#include "copyFile.h"
 #include "globalVars.h"
-#include <iostream>
 
 void sortArrays()
 {
@@ -51,9 +50,6 @@ void sortArrays()
 				//Deals with nested folders or otherwise unsorted files
 				//	(Will dump them into SourceUnhandled/)
 
-				//The input file - Any files that are not supported
-				std::ifstream src(sourcePathFilesFullPath.at(i), std::ios::binary);
-
 				//Grabs the filename
 				std::string fileName = getFileName(sourcePathFileNames.at(i), fileExtUpper);
 				//Creates a theoretical path for th file
@@ -63,12 +59,7 @@ void sortArrays()
 				//Function will decide which (checkPath or alternatePath) to use
 				std::string destPath = duplicateDetector(checkPath, alternatePath);
 
-				std::ofstream dst(destPath, std::ios::binary);
-
-				//Copies input to output
-				dst << src.rdbuf();
-				src.close();
-				dst.close();
+				copyFile(sourcePathFilesFullPath.at(i), destPath);
 
 				//Increments
 				totalSorts++;

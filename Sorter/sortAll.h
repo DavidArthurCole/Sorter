@@ -1,8 +1,4 @@
 #pragma once
-
-#include <iostream>
-#include <string>
-#include <fstream>
 #include <thread>
 #include <mutex>
 
@@ -11,6 +7,7 @@
 #include "FileHandler.h"
 #include "getFileName.h"
 #include "duplicateDetector.h"
+#include "copyFile.h"
 
 std::mutex mtx;
 
@@ -21,9 +18,6 @@ void sort(fileHandler fileHandler) {
 		//Iterates through the files
 		for (int i = 0; i < (fileHandler.count); i++)
 		{
-			//The input file
-			std::ifstream src(fileHandler.fullPath.at(i), std::ios::binary);
-
 			//Grabs the file's name
 			std::string fileName = getFileName(fileHandler.fileNames.at(i), fileHandler.fileType);
 			//Creates a path for the file
@@ -31,21 +25,13 @@ void sort(fileHandler fileHandler) {
 			//Creates the alternate path, incase a file with the same name exists
 			std::string alternatePath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + " (%FILL_INT_HERE%)" + "." + fileHandler.fileType;
 			//Function will decide what the file is named
-			std::string newName = duplicateDetector(checkPath, alternatePath);
-
-			//The output file
-			std::ofstream dst(newName, std::ios::binary);
-
-			//Copies input to output
-			dst << src.rdbuf();
-
-			//Precaution to avoid mem overflow
-			dst.close();
-			src.close();
+			std::string newPath = duplicateDetector(checkPath, alternatePath);
+			
+			copyFile(fileHandler.fullPath.at(i), newPath);
 
 			totalSorts++;
 
-			//So that multiple threads to not overlap their outputs
+			//So that multiple threads dlo not overlap their outputs
 			mtx.lock();
 			std::cout << "\r\rSorting... (" << std::to_string(totalSorts) << " / " << std::to_string(sourcePathCount) << ")";
 			mtx.unlock();

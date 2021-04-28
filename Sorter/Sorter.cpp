@@ -1,29 +1,30 @@
 //Include statments
-#include <iostream>
-#include <string>
 #include <chrono>
 
 //Custom header files
 #include "sortAll.h"
 #include "sortArrays.h"
 #include "buildFileStructure.h"
-#include "buildFileHandlersVector.h"
 #include "cleanSource.h"
 #include "getFolderSize.h"
 #include "fileHandler.h"
 #include "getFileName.h"
-#include "handleFlags.h"
 
 int main(int argc, char* argv[])
 {
 	//Will handle any input flags
-	handleFlags(argc, argv);
+	for (int i = 0; i < argc; i++) {
+		if (argv[i] == "-postclean") postClean = true;
+		else if (argv[i] == "-nomaxes") noMaxes = true;
+	}
 
 	//Will build the folder structure that the program uses
 	buildFileStructure();
 
-	//Fills the fileHandlers vector with new instances
-	buildFileHandlersVector();
+	//Fills the vector with FileHandlers of each supported type
+	for (int i = 0; i < DIF_FILE_TYPES; i++) {
+		fileHandlers.push_back(fileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath, noMaxes));
+	}
 
 	//Adds files into arrays to be sorted
 	fillSourceArray(sourcePath);

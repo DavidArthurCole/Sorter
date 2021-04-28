@@ -1,8 +1,4 @@
 #pragma once
-#include <vector>
-#include <string>
-#include <filesystem>
-
 #include "globalVars.h"
 
 using namespace std::filesystem;

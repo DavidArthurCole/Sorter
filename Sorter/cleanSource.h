@@ -1,10 +1,8 @@
 #pragma once
 #include <chrono>
-#include <iostream>
-#include "globalVars.h"
-#include <string>
 #include <stdlib.h>
-#include <filesystem>
+
+#include "globalVars.h"
 
 void cleanSource()
 {

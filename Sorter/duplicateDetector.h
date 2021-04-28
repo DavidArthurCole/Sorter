@@ -1,16 +1,17 @@
 #pragma once
-
-#include <string>
-#include <iostream>
-#include <filesystem>
 #include "globalVars.h"
 
 std::string replace(std::string str, const std::string& from, const std::string& to) {
+	//Creates a copy of the string to manipulate
 	std::string strCopy = str;
+	//Gets the position of the first string
 	size_t start_pos = strCopy.find(from);
+	//If the string to be replaced doesn't exist, return empty
 	if (start_pos == std::string::npos)
 		return std::string();
+	//Replace from the start position until the end with "to"
 	strCopy.replace(start_pos, from.length(), to);
+	//Return the string
 	return strCopy;
 }
 
