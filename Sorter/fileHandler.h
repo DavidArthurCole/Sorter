@@ -26,14 +26,12 @@ public:
 		// 2 is pictures
 		// 3 is videos
 	int container;
-	//Current max number of the stored file
-	int currentMax;
 	//How many files with this type have been found
 	int count;
 
 	std::vector<std::string> fullPath{ }, fileNames{ };
 
-	fileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath, bool noMaxes) {
+	fileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath) {
 		//Sets the filetype
 		this->fileType = passedFileType;
 
@@ -58,31 +56,6 @@ public:
 
 		//How many of this file have been found
 		this->count = 0;
-
-		//Initializes the currentMax as a 0
-		this->currentMax = 0;
-		//Calculates the maximum value
-		this->calcMax(noMaxes);
-	}
-
-	void calcMax(bool noMaxes) {
-
-		int store = 0, compare = 0;
-
-		if (!noMaxes) {
-			//Appends the correct container name given the container var
-			std::string pathAppend = this->pathAppendFileType + this->fileType;
-
-			for (const auto& entry : directory_iterator(this->basePath + pathAppend))
-			{
-				// Does not look through names of pre-existing folders
-				// Without this check, the program will violently crash
-				// every time it comes across a folder in a source dir
-				if (!is_directory(entry)) this->currentMax++;
-			}
-		}
-		//Stores the currentMax in the var
-		this->currentMax = store;
 	}
 
 	void incrementCount() {

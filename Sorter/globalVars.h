@@ -77,10 +77,6 @@ bool freshSource = false;
 
 //Flags that can be set, default is false
 bool postClean = false;
-bool noMaxes = false;
-
-//Used in sortAll.h
-boolean consoleBusy = false;
 
 //Used in duplicateDetector
 const std::string replaceReg = "%FILL_INT_HERE%";

@@ -3,6 +3,7 @@
 #include "getFileName.h"
 #include "FileHandler.h"
 #include "globalVars.h"
+#include "copyHelper.h"
 
 void sortArrays()
 {
@@ -58,14 +59,11 @@ void sortArrays()
 
 				//Grabs the filename
 				std::string fileName = getFileName(sourcePathFileNames.at(i), fileExtUpper);
-				//Creates a theoretical path for th file
-				std::string checkPath = basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i);
-				//Creates an alternate path incase a file with the same path already exists
-				std::string alternatePath = basePath + "\\SourceUnhandled\\" + fileName + " (%FILL_INT_HERE%)" + "." + fileExt;
-				//Function will decide which (checkPath or alternatePath) to use
-				std::string destPath = duplicateDetector(checkPath, alternatePath);
 
-				copy_file(sourcePathFilesFullPath.at(i), destPath);
+				//Copies the file
+				copyHelper(sourcePathFilesFullPath.at(i), fileName,
+					basePath + "\\SourceUnhandled\\" + sourcePathFileNames.at(i), //Possible path if there are no duplicates
+					basePath + "\\SourceUnhandled\\" + fileName + " (%FILL_INT_HERE%)" + "." + fileExt); //Path if there are dupes
 
 				//Increments
 				totalSorts++;

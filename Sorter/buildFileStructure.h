@@ -70,8 +70,7 @@ void buildFileStructure()
 	}
 
 	//Adds picture file types to the 'all' array
-	for (int i = 0; i < PIC_FILE_TYPES; i++)
-	{
+	for (int i = 0; i < PIC_FILE_TYPES; i++){
 		allFileTypes->push_back(picFileTypes[i]);
 		allFileTypesContainers->push_back(2);
 		//Creates picture sub folders
@@ -80,8 +79,8 @@ void buildFileStructure()
 	}
 
 	//Adds video file types to the 'all' array
-	for (int i = 0; i < VID_FILE_TYPES; i++)
-	{
+	//beans
+	for (int i = 0; i < VID_FILE_TYPES; i++){
 		allFileTypes->push_back(vidFileTypes[i]);
 		allFileTypesContainers->push_back(3);
 		//Creates video sub folders
@@ -90,8 +89,7 @@ void buildFileStructure()
 	}
 
 	//Adds document file types to the 'all' array
-	for (int i = 0; i < DOC_FILE_TYPES; i++)
-	{
+	for (int i = 0; i < DOC_FILE_TYPES; i++){
 		allFileTypes->push_back(docFileTypes[i]);
 		allFileTypesContainers->push_back(0);
 		//Creates document sub folders
@@ -100,8 +98,7 @@ void buildFileStructure()
 	}
 
 	//Adds audio file types to the 'all' array
-	for (int i = 0; i < AUDIO_FILE_TYPES; i++)
-	{
+	for (int i = 0; i < AUDIO_FILE_TYPES; i++){
 		allFileTypes->push_back(audioFileTypes[i]);
 		allFileTypesContainers->push_back(1);
 		//Creates audio sub folders

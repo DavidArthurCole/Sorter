@@ -15,7 +15,6 @@ int main(int argc, char* argv[])
 	//Will handle any input flags
 	for (int i = 0; i < argc; i++) {
 		if (argv[i] == "-postclean") postClean = true;
-		else if (argv[i] == "-nomaxes") noMaxes = true;
 	}
 
 	//Will build the folder structure that the program uses
@@ -23,11 +22,12 @@ int main(int argc, char* argv[])
 
 	//Fills the vector with FileHandlers of each supported type
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
-		fileHandlers.push_back(fileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath, noMaxes));
+		fileHandlers.push_back(fileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath));
 	}
 
 	//Adds files into arrays to be sorted
 	fillSourceArray(sourcePath);
+
 	sortArrays();
 
 	//Calculates size of the source folder

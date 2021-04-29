@@ -6,7 +6,7 @@
 #include "fillSourceArray.h"
 #include "FileHandler.h"
 #include "getFileName.h"
-#include "duplicateDetector.h"
+#include "copyHelper.h"
 
 std::mutex mtx;
 
@@ -19,18 +19,15 @@ void sort(fileHandler fileHandler) {
 		{
 			//Grabs the file's name
 			std::string fileName = getFileName(fileHandler.fileNames.at(i), fileHandler.fileType);
-			//Creates a path for the file
-			std::string checkPath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + "." + fileHandler.fileType;
-			//Creates the alternate path, incase a file with the same name exists
-			std::string alternatePath = fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + " (%FILL_INT_HERE%)" + "." + fileHandler.fileType;
-			//Function will decide what the file is named
-			std::string newPath = duplicateDetector(checkPath, alternatePath);
-			
-			copy_file(fileHandler.fullPath.at(i), newPath);
+
+			//Copies the file
+			copyHelper(fileHandler.fullPath.at(i), fileName,
+				fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + "." + fileHandler.fileType, //Possible path if there are no duplicates
+				fileHandler.pathAppendFileType + fileHandler.fileType + "/" + fileName + " (%FILL_INT_HERE%)" + "." + fileHandler.fileType); //Path if there are dupes
 
 			totalSorts++;
 
-			//So that multiple threads dlo not overlap their outputs
+			//So that multiple threads do not overlap their outputs
 			mtx.lock();
 			std::cout << "\r\rSorting... (" << std::to_string(totalSorts) << " / " << std::to_string(sourcePathCount) << ")";
 			mtx.unlock();
