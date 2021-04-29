@@ -1,10 +1,4 @@
 #pragma once
-#include <string>
-#include <fstream>
-#include <Windows.h>
-#include <iostream>
-#include <filesystem>
-
 #include "globalVars.h"
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -57,31 +51,6 @@ void buildFileStructure()
 	//  |__ Sorter.exe (Self)
 	//=========================
 
-	//Adds picture file types to the 'all' array
-	for (int i = 0; i < PIC_FILE_TYPES; i++)
-	{
-		allFileTypes->push_back(picFileTypes[i]);
-		allFileTypesContainers->push_back(2);
-	}
-	//Adds video file types to the 'all' array
-	for (int i = 0; i < VID_FILE_TYPES; i++)
-	{
-		allFileTypes->push_back(vidFileTypes[i]);
-		allFileTypesContainers->push_back(3);
-	}
-	//Adds document file types to the 'all' array
-	for (int i = 0; i < DOC_FILE_TYPES; i++)
-	{
-		allFileTypes->push_back(docFileTypes[i]);
-		allFileTypesContainers->push_back(0);
-	}
-	//Adds audio file types to the 'all' array
-	for (int i = 0; i < AUDIO_FILE_TYPES; i++)
-	{
-		allFileTypes->push_back(audioFileTypes[i]);
-		allFileTypesContainers->push_back(1);
-	}
-
 	//All folders and subfolders that need to be created
 	const int folderStructCount = 6;
 	const char* baseFolderStructure[folderStructCount] =
@@ -100,25 +69,43 @@ void buildFileStructure()
 		if (!exists(baseFolderStructure[i])) create_directory(baseFolderStructure[i]);
 	}
 
-	//Creates video sub folders
-	for (int i = 0; i < VID_FILE_TYPES; i++) {
-		std::string folderPath = "Videos\\" + vidFileTypes[i];
-		if (!exists(folderPath)) create_directory(folderPath);
-	}
-	//Creates picture sub folders
-	for (int i = 0; i < PIC_FILE_TYPES; i++) {
+	//Adds picture file types to the 'all' array
+	for (int i = 0; i < PIC_FILE_TYPES; i++)
+	{
+		allFileTypes->push_back(picFileTypes[i]);
+		allFileTypesContainers->push_back(2);
+		//Creates picture sub folders
 		std::string folderPath = "Pictures\\" + picFileTypes[i];
 		if (!exists(folderPath)) create_directory(folderPath);
 	}
-	//Creates audio sub folders
-	for (int i = 0; i < AUDIO_FILE_TYPES; i++) {
-		std::string folderPath = "Audio\\" + audioFileTypes[i];
+
+	//Adds video file types to the 'all' array
+	for (int i = 0; i < VID_FILE_TYPES; i++)
+	{
+		allFileTypes->push_back(vidFileTypes[i]);
+		allFileTypesContainers->push_back(3);
+		//Creates video sub folders
+		std::string folderPath = "Videos\\" + vidFileTypes[i];
 		if (!exists(folderPath)) create_directory(folderPath);
 	}
-	//Creates document sub folders
-	for (int i = 0; i < DOC_FILE_TYPES; i++) {
+
+	//Adds document file types to the 'all' array
+	for (int i = 0; i < DOC_FILE_TYPES; i++)
+	{
+		allFileTypes->push_back(docFileTypes[i]);
+		allFileTypesContainers->push_back(0);
+		//Creates document sub folders
 		std::string folderPath = "Documents\\" + docFileTypes[i];
 		if (!exists(folderPath)) create_directory(folderPath);
 	}
 
+	//Adds audio file types to the 'all' array
+	for (int i = 0; i < AUDIO_FILE_TYPES; i++)
+	{
+		allFileTypes->push_back(audioFileTypes[i]);
+		allFileTypesContainers->push_back(1);
+		//Creates audio sub folders
+		std::string folderPath = "Audio\\" + audioFileTypes[i];
+		if (!exists(folderPath)) create_directory(folderPath);
+	}
 }

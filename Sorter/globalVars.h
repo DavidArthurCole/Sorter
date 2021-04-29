@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-#include "getExePath.h"
 #include "fileHandler.h"
 #endif
 
@@ -46,6 +45,15 @@ std::vector<fileHandler> fileHandlers;
 auto startExec = std::chrono::steady_clock::now();
 auto startArrayTimer = std::chrono::steady_clock::now();
 
+std::string getExePath() {
+	//Gets the full path, including the executable name
+	std::string path = __argv[0];
+	//Replaces \ with / in the path
+	std::replace(path.begin(), path.end(), '\\', '/');
+	//Returns the path without the .exe
+	return(path.substr(0, path.find_last_of("/") + 1));
+}
+
 //Working directory
 std::string basePath = getExePath();
 
@@ -75,6 +83,6 @@ bool noMaxes = false;
 boolean consoleBusy = false;
 
 //Used in duplicateDetector
-std::string replaceReg = "%FILL_INT_HERE%";
+const std::string replaceReg = "%FILL_INT_HERE%";
 
 #endif

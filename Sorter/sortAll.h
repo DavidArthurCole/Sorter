@@ -7,7 +7,6 @@
 #include "FileHandler.h"
 #include "getFileName.h"
 #include "duplicateDetector.h"
-#include "copyFile.h"
 
 std::mutex mtx;
 
@@ -27,7 +26,7 @@ void sort(fileHandler fileHandler) {
 			//Function will decide what the file is named
 			std::string newPath = duplicateDetector(checkPath, alternatePath);
 			
-			copyFile(fileHandler.fullPath.at(i), newPath);
+			copy_file(fileHandler.fullPath.at(i), newPath);
 
 			totalSorts++;
 

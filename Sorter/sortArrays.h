@@ -1,9 +1,7 @@
 #pragma once
 #include "fillSourceArray.h"
-#include "getFileExtension.h"
 #include "getFileName.h"
 #include "FileHandler.h"
-#include "copyFile.h"
 #include "globalVars.h"
 
 void sortArrays()
@@ -19,7 +17,15 @@ void sortArrays()
 	for (int i = 0; i < sourcePathCount; i++)
 	{
 		//String to hold filetype before the file is sorted into its array
-		std::string fileExt = getFileExtension(sourcePathFilesFullPath.at(i));
+		std::string fileExt = "";
+		if (sourcePathFilesFullPath.at(i).find_last_of(".") != std::string::npos) {
+			//Gets the supposed file type
+			std::string posFileType = sourcePathFilesFullPath.at(i).substr(sourcePathFilesFullPath.at(i).find_last_of(".") + 1);
+			//Will not return file types longer than 6 chars (to account for type-less-files with periods in them)
+			if (posFileType.length() <= 6) fileExt = posFileType; //Returns every char in the string after the last '.'
+			else fileExt = "";
+		}
+		else fileExt = "";
 
 		// Given the filetype, find which array it should be put in
 		// (if any), add it, then +1 to the count of that filetype
@@ -59,7 +65,7 @@ void sortArrays()
 				//Function will decide which (checkPath or alternatePath) to use
 				std::string destPath = duplicateDetector(checkPath, alternatePath);
 
-				copyFile(sourcePathFilesFullPath.at(i), destPath);
+				copy_file(sourcePathFilesFullPath.at(i), destPath);
 
 				//Increments
 				totalSorts++;
