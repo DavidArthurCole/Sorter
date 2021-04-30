@@ -12,9 +12,10 @@
 
 int main(int argc, char* argv[])
 {
-	//Will handle any input flags
-	for (int i = 0; i < argc; i++) {
-		if (argv[i] == "-postclean") postClean = true;
+
+	//Handles flag
+	if (argc >= 2) {
+		if (std::string(argv[1]) == "-postclean") postClean = true;
 	}
 
 	//Will build the folder structure that the program uses
@@ -22,7 +23,7 @@ int main(int argc, char* argv[])
 
 	//Fills the vector with FileHandlers of each supported type
 	for (int i = 0; i < DIF_FILE_TYPES; i++) {
-		fileHandlers.push_back(fileHandler(allFileTypes->at(i), allFileTypesContainers->at(i), basePath));
+		fileHandlers.push_back(fileHandler(allFileTypes->at(i), pathAppends->at(i), basePath));
 	}
 
 	//Adds files into arrays to be sorted

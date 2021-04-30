@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <stdlib.h>
+#include <fileapi.h>
 
 #include "globalVars.h"
 
@@ -13,8 +14,10 @@ void cleanSource()
 		//Starts the removal of the source directory
 		auto startClean = std::chrono::steady_clock::now();
 		std::cout << "\nStarting clean-up process, please do not close the program or press any buttons.\n";
-		remove_all(sourcePath);
-
+		
+		std::string rmdirString = "rmdir /s /q \"" + sourcePath + "\"";
+		system(rmdirString.c_str());
+		
 		//Loop ensures that the program does not continue until source is deleted
 		bool sourceDeleted = false;
 		while (sourceDeleted == false) if (!exists(sourcePath)) sourceDeleted = true;
@@ -29,5 +32,5 @@ void cleanSource()
 
 	//Total timer ended
 	auto durationExec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startExec);
-	std::cout << "Sorting program completed in " << float(durationExec.count() / 1000.00) << " seconds.\n";	
+	std::cout << "Sorting program completed in " << float(durationExec.count() / 1000.00) << " seconds.\n";
 }

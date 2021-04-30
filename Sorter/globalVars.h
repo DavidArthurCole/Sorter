@@ -22,8 +22,8 @@ const int PIC_FILE_TYPES = 5;
 const std::string picFileTypes[] = { "BMP","JFIF","JPEG","JPG","PNG" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW VIDEO FILE TYPE:
-const int VID_FILE_TYPES = 9;
-const std::string vidFileTypes[VID_FILE_TYPES] = { "AVI", "FLV","GIF","M4V","MKV","MOV","MP4","MPG", "WEBM" };
+const int VID_FILE_TYPES = 10;
+const std::string vidFileTypes[VID_FILE_TYPES] = { "AVI", "FLV","GIF","M4V","MKV","MOV","MP4","MPG", "WEBM", "WMV" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW DOCUMENT FILE TYPE:
 const int DOC_FILE_TYPES = 9;
@@ -36,7 +36,7 @@ const std::string audioFileTypes[AUDIO_FILE_TYPES] = { "FLAC", "M4A", "MP3", "WA
 
 const int DIF_FILE_TYPES = PIC_FILE_TYPES + VID_FILE_TYPES + DOC_FILE_TYPES + AUDIO_FILE_TYPES;
 std::vector<std::string> allFileTypes[DIF_FILE_TYPES];
-std::vector<int> allFileTypesContainers[DIF_FILE_TYPES];
+std::vector <std::string> pathAppends[DIF_FILE_TYPES];
 
 //Vector of fileHandlers
 std::vector<fileHandler> fileHandlers;

@@ -20,37 +20,17 @@ public:
 	std::string basePath;
 	//Essentially the same thing as fileType, but capital
 	std::string pathAppendFileType;
-	//Container points to which folder will contain the file type:
-		// 0 is documents
-		// 1 is audio
-		// 2 is pictures
-		// 3 is videos
-	int container;
 	//How many files with this type have been found
 	int count;
 
 	std::vector<std::string> fullPath{ }, fileNames{ };
 
-	fileHandler(std::string passedFileType, int passedContainer, std::string passedBasePath) {
+	fileHandler(std::string passedFileType, std::string pathAppendFileType, std::string passedBasePath) {
 		//Sets the filetype
 		this->fileType = passedFileType;
 
-		//Sets the container
-		this->container = passedContainer;
-		switch (this->container) {
-		case 0:
-			this->pathAppendFileType = "Documents/";
-			break;
-		case 1:
-			this->pathAppendFileType = "Audio/";
-			break;
-		case 2:
-			this->pathAppendFileType = "Pictures/";
-			break;
-		case 3:
-			this->pathAppendFileType = "Videos/";
-			break;
-		}
+		//Sets the append type
+		this->pathAppendFileType = pathAppendFileType;
 
 		this->basePath = passedBasePath;
 

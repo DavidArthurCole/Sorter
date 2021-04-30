@@ -72,7 +72,7 @@ void buildFileStructure()
 	//Adds picture file types to the 'all' array
 	for (int i = 0; i < PIC_FILE_TYPES; i++){
 		allFileTypes->push_back(picFileTypes[i]);
-		allFileTypesContainers->push_back(2);
+		pathAppends->push_back("Pictures/");
 		//Creates picture sub folders
 		std::string folderPath = "Pictures\\" + picFileTypes[i];
 		if (!exists(folderPath)) create_directory(folderPath);
@@ -82,7 +82,7 @@ void buildFileStructure()
 	//beans
 	for (int i = 0; i < VID_FILE_TYPES; i++){
 		allFileTypes->push_back(vidFileTypes[i]);
-		allFileTypesContainers->push_back(3);
+		pathAppends->push_back("Videos/");
 		//Creates video sub folders
 		std::string folderPath = "Videos\\" + vidFileTypes[i];
 		if (!exists(folderPath)) create_directory(folderPath);
@@ -91,7 +91,7 @@ void buildFileStructure()
 	//Adds document file types to the 'all' array
 	for (int i = 0; i < DOC_FILE_TYPES; i++){
 		allFileTypes->push_back(docFileTypes[i]);
-		allFileTypesContainers->push_back(0);
+		pathAppends->push_back("Documents/");
 		//Creates document sub folders
 		std::string folderPath = "Documents\\" + docFileTypes[i];
 		if (!exists(folderPath)) create_directory(folderPath);
@@ -100,7 +100,7 @@ void buildFileStructure()
 	//Adds audio file types to the 'all' array
 	for (int i = 0; i < AUDIO_FILE_TYPES; i++){
 		allFileTypes->push_back(audioFileTypes[i]);
-		allFileTypesContainers->push_back(1);
+		pathAppends->push_back("Audio/");
 		//Creates audio sub folders
 		std::string folderPath = "Audio\\" + audioFileTypes[i];
 		if (!exists(folderPath)) create_directory(folderPath);
