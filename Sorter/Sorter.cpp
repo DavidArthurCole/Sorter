@@ -1,18 +1,20 @@
+#include <windows.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <sstream>
+#include <filesystem>
 #include <chrono>
 #include <thread>
-#include <filesystem>
-#include <iostream>
 #include <mutex>
-#include <Windows.h>
-#include <sstream>
-#include <algorithm>
-#include <cctype>
+#include <unordered_map>
 
 #include "fileHandler.h"
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-//Size used to create an array (aka maximum amount of each file type that can be handled in one iteration)
+// Size used to create an array (aka maximum amount of each file type that can be handled in one iteration)
 const int MAX_SIZE = 16384;
 
 // A SET OF THESE WILL NEED TO BE EDITED EVERYTIME A NEW FILETYPE IS ADDED
@@ -21,15 +23,15 @@ const int MAX_SIZE = 16384;
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW PICTURE FILE TYPE:
 const int PIC_FILE_TYPES = 5;
-const std::string picFileTypes[] = { "BMP","JFIF","JPEG","JPG","PNG" };
+const std::string picFileTypes[] = { "BMP", "JFIF", "JPEG", "JPG", "PNG" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW VIDEO FILE TYPE:
 const int VID_FILE_TYPES = 10;
-const std::string vidFileTypes[VID_FILE_TYPES] = { "AVI", "FLV","GIF","M4V","MKV","MOV","MP4","MPG", "WEBM", "WMV" };
+const std::string vidFileTypes[VID_FILE_TYPES] = { "AVI", "FLV", "GIF", "M4V", "MKV", "MOV", "MP4", "MPG", "WEBM", "WMV" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW DOCUMENT FILE TYPE:
 const int DOC_FILE_TYPES = 9;
-const std::string docFileTypes[DOC_FILE_TYPES] = { "DOC", "DOCX", "PDF", "PPT", "PPTX","PST","TXT","XLS","XLSX" };
+const std::string docFileTypes[DOC_FILE_TYPES] = { "DOC", "DOCX", "PDF", "PPT", "PPTX", "PST", "TXT", "XLS", "XLSX" };
 //===========================================================================================================
 // IF YOU ARE ADDING A NEW AUDIO FILE TYPE:
 const int AUDIO_FILE_TYPES = 4;
@@ -37,18 +39,19 @@ const std::string audioFileTypes[AUDIO_FILE_TYPES] = { "FLAC", "M4A", "MP3", "WA
 //===========================================================================================================
 
 const int DIF_FILE_TYPES = PIC_FILE_TYPES + VID_FILE_TYPES + DOC_FILE_TYPES + AUDIO_FILE_TYPES;
-std::vector<std::string> allFileTypes[DIF_FILE_TYPES];
-std::vector <std::string> pathAppends[DIF_FILE_TYPES];
+std::vector<std::string> allFileTypes;
+std::vector<std::string> pathAppends;
 
-//Vector of fileHandlers
+// Vector of fileHandlers
 std::vector<fileHandler> fileHandlers;
 
-//Total execution timer
+// Total execution timer
 auto startExec = std::chrono::steady_clock::now();
 auto startArrayTimer = std::chrono::steady_clock::now();
 
 // Global vector to hold file types to sort (if empty, sort all)
 static std::vector<std::string> onlySortTypes;
+static int filteredSourceCount = 0;
 
 // Helper to trim whitespace from a string
 static std::string trim(const std::string& s) {
@@ -72,24 +75,30 @@ static std::string replace(std::string str, const std::string& from, const std::
 }
 
 static std::string getExePath() {
-    //Gets the full path, including the executable name
+    // Gets the full path, including the executable name
     std::string path = __argv[0];
-    //Replaces \ with / in the path
+    // Replaces \ with / in the path
     std::replace(path.begin(), path.end(), '\\', '/');
-    //Returns the path without the .exe
-    return(path.substr(0, path.find_last_of("/") + 1));
+    // Returns the path without the .exe
+    return (path.substr(0, path.find_last_of("/") + 1));
 }
 
-std::string basePath = getExePath(); //Working directory
-std::string sourcePath = basePath + "Source"; //Files that need to be sorted
-std::vector<std::string> sourcePathFilesFullPath; //Stores all files that need to be sorted as a path
-std::vector<std::string> sourcePathFileNames; //Stores all files that need to be sorted as their file name
-int sourcePathCount = 0; //Counts how many files are in sourcePath
-int totalSorts = 0; //Counts total sorted files
-bool freshSource = false; //Random boolean logic to prevent removing a freshly generated sourcedir
+// Helper to convert a std::u8string to a std::string.
+static std::string u8_to_string(const std::u8string& u8str) {
+    // reinterpret_cast the underlying data to const char*
+    return std::string(reinterpret_cast<const char*>(u8str.data()), u8str.size());
+}
 
-bool postClean = false; //Flags that can be set, default is false
-const std::string replaceReg = "%FILL_INT_HERE%"; //Used in duplicateDetector
+std::string basePath = getExePath(); // Working directory
+auto sourcePath = std::filesystem::path(getExePath()) / u8"Source";
+std::vector<std::string> sourcePathFilesFullPath; // Stores all files that need to be sorted as a path
+std::vector<std::string> sourcePathFileNames; // Stores all files that need to be sorted as their file name
+int sourcePathCount = 0; // Counts how many files are in sourcePath
+int totalSorts = 0; // Counts total sorted files
+bool freshSource = false; // Random boolean logic to prevent removing a freshly generated sourcedir
+
+bool postClean = false; // Flags that can be set, default is false
+const std::string replaceReg = "%FILL_INT_HERE%"; // Used in duplicateDetector
 std::mutex mtx = std::mutex();
 
 static void buildFileStructure() {
@@ -184,8 +193,8 @@ static void buildFileStructure() {
 
         for (int j = 0; j < correlatedCount; j++) {
 
-            allFileTypes->push_back(allTypeArray[i]);
-            pathAppends->push_back(folderName);
+            allFileTypes.push_back(allTypeArray[i]);
+            pathAppends.push_back(folderName);
 
             std::string folderPath = folderName + "\\" + allTypeArray[i];
             if (!exists(folderPath)) create_directory(folderPath);
@@ -195,42 +204,60 @@ static void buildFileStructure() {
             currentIndex++;
         }
     }
+
+    // If onlySortTypes is specified, keep only unique file types that match the filter.
+    if (!onlySortTypes.empty()) {
+        std::vector<std::string> filteredAllFileTypes;
+        std::vector<std::string> filteredPathAppends;
+        for (size_t i = 0; i < allFileTypes.size(); i++) {
+            // Check if this file type is one of the onlySortTypes.
+            if (std::find(onlySortTypes.begin(), onlySortTypes.end(), allFileTypes[i]) != onlySortTypes.end()) {
+                // Add only once (to avoid duplicate file handlers).
+                if (std::find(filteredAllFileTypes.begin(), filteredAllFileTypes.end(), allFileTypes[i]) == filteredAllFileTypes.end()) {
+                    filteredAllFileTypes.push_back(allFileTypes[i]);
+                    filteredPathAppends.push_back(pathAppends[i]);
+                }
+            }
+        }
+        // Replace the full arrays with the filtered ones.
+        allFileTypes = filteredAllFileTypes;
+        pathAppends = filteredPathAppends;
+    }
 }
 
 static void cleanSource() {
     using namespace std::filesystem;
-
     if (postClean && !freshSource) {
-        // Starts the removal of the source directory
         auto startClean = std::chrono::steady_clock::now();
-        std::cout << "\nStarting clean-up process, please do not close the program or press any buttons.\n";
+        std::cout << "\nStarting post-clean process (removing sorted files)...\n";
 
-        try {
-            // Remove the source directory and its contents
-            remove_all(sourcePath);
-
-            // Loop ensures that the program does not continue until source is deleted
-            while (exists(sourcePath)) {
-                // Wait until the directory is deleted
+        int removedCount = 0;
+        // Iterate over each fileHandler, and for each sorted file remove it from the source.
+        for (auto& fh : fileHandlers) {
+            for (const auto& sortedFile : fh.fullPath) {
+                try {
+                    if (exists(sortedFile)) {
+                        remove(sortedFile);
+                        removedCount++;
+                    }
+                }
+                catch (const std::exception& ex) {
+                    std::cerr << "Error removing file " << sortedFile << ": " << ex.what() << std::endl;
+                }
             }
-
-            // Creates the source directory again
-            create_directory(sourcePath);
-
-            // Last clock ends
-            auto cleanDuration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startClean);
-            std::cout << "Clean-up and rebuild finished in " << float(cleanDuration.count() / 1000.0) << " seconds.\n";
         }
-        catch (const std::exception& ex) {
-            std::cerr << "Error during clean-up: " << ex.what() << std::endl;
-        }
+        std::cout << "Removed " << removedCount << " sorted file(s) from the source directory.\n";
+
+        auto cleanDuration = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::steady_clock::now() - startClean);
+        std::cout << "Post-clean finished in " << float(cleanDuration.count() / 1000.0) << " seconds.\n";
     }
     else if (postClean && freshSource) {
         std::cout << "\nSkipping post-clean as the source was freshly built\n";
     }
 
-    // Total timer ended
-    auto durationExec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startExec);
+    auto durationExec = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now() - startExec);
     std::cout << "Sorting program completed in " << float(durationExec.count() / 1000.0) << " seconds.\n";
 }
 
@@ -308,7 +335,7 @@ static void sort(fileHandler fileHandler) {
                 fileHandler.pathAppendFileType + "/" + fileHandler.fileType + "/" + fileName + " (%FILL_INT_HERE%)" + "." + fileHandler.fileType);
             totalSorts++;
             mtx.lock();
-            std::cout << "\r\rSorting... (" << totalSorts << " / " << sourcePathCount << ")";
+            std::cout << "\r\rSorting... (" << totalSorts << " / " << filteredSourceCount << ")";
             mtx.unlock();
         }
     }
@@ -334,90 +361,74 @@ static void sortAll() {
 }
 
 
-static void sortArrays() {
-    // Var for the index of the filetype in the 'all-types' array
-    int fileExtIndex;
-    // Intra-loop vars
-    std::string lastFileExt;
-    int lastIndex = 0;
-
-    // For every file that was added to the sourceArray
+static void sortArrays(const std::unordered_map<std::string, int>& extToIndex) {
+    filteredSourceCount = 0;
+    // First pass: count files that match the filter.
     for (int i = 0; i < sourcePathCount; ++i) {
-        // Grab the current full file path
         const std::string& currentFileSource = sourcePathFilesFullPath[i];
-
-        // String to hold filetype before the file is sorted into its array
         std::string fileExt;
         if (auto pos = currentFileSource.find_last_of('.'); pos != std::string::npos) {
-            // Gets the supposed file type
             std::string posFileType = currentFileSource.substr(pos + 1);
-            // Will not return file types longer than 6 chars
-            if (posFileType.length() <= 6) fileExt = std::move(posFileType);
+            if (posFileType.length() <= 6)
+                fileExt = posFileType;
         }
-
-        // Convert fileExt to uppercase
         std::transform(fileExt.begin(), fileExt.end(), fileExt.begin(), ::toupper);
 
-        // Don't sort DLL files or SYS files
-        if (fileExt == "DLL" || fileExt == "SYS" || fileExt == "BIN") continue;
+        // Skip unsupported file types.
+        if (fileExt == "DLL" || fileExt == "SYS" || fileExt == "BIN")
+            continue;
 
-        // Only sort file if no onlySortTypes specified or if the file extension is in the list
+        // Apply the filter.
         if (!onlySortTypes.empty() &&
             std::find(onlySortTypes.begin(), onlySortTypes.end(), fileExt) == onlySortTypes.end()) {
-            continue; // Skip this file if its type is not in onlySortTypes
+            continue;
+        }
+        ++filteredSourceCount;
+    }
+    std::cout << "Found " << filteredSourceCount << " file(s) matching filter(s) out of " << sourcePathCount << " total file(s).\n";
+
+    // Second pass: distribute the filtered files to their respective fileHandlers.
+    for (int i = 0; i < sourcePathCount; ++i) {
+        const std::string& currentFileSource = sourcePathFilesFullPath[i];
+        std::string fileExt;
+        if (auto pos = currentFileSource.find_last_of('.'); pos != std::string::npos) {
+            std::string posFileType = currentFileSource.substr(pos + 1);
+            if (posFileType.length() <= 6)
+                fileExt = posFileType;
+        }
+        std::transform(fileExt.begin(), fileExt.end(), fileExt.begin(), ::toupper);
+
+        if (fileExt == "DLL" || fileExt == "SYS" || fileExt == "BIN")
+            continue;
+
+        if (!onlySortTypes.empty() &&
+            std::find(onlySortTypes.begin(), onlySortTypes.end(), fileExt) == onlySortTypes.end()) {
+            continue;
         }
 
-        // Saves calculation time if multiple files in a row have the same file type
-        if (fileExt == lastFileExt) {
-            fileExtIndex = lastIndex;
-        }
-        else {
-            // Finds the index of the filetype in the map
-            auto it = std::find(allFileTypes->begin(), allFileTypes->end(), fileExt);
-            fileExtIndex = static_cast<int>(std::distance(allFileTypes->begin(), it));
-            lastFileExt = fileExt;
-            lastIndex = fileExtIndex;
-        }
-
-        // If the file type is not in the list, it will be put into SourceUnhandled
-        if (fileExtIndex == DIF_FILE_TYPES) {
-            // Don't include folders
-            if (!std::filesystem::is_directory(currentFileSource)) {
-                // Grabs the filename
-                std::string fileName = getFileName(currentFileSource, fileExt);
-
-                // Copies the file
-                copyHelper(currentFileSource, fileName,
-                    basePath + "\\SourceUnhandled\\" + currentFileSource,
-                    basePath + "\\SourceUnhandled\\" + fileName + " (%FILL_INT_HERE%)" + "." + fileExt);
-
-                // Increments
-                ++totalSorts;
-                std::cout << "\rSorted " << totalSorts << " unsupported files. (" << totalSorts << " total)";
-            }
-        }
-        else {
+        auto it = extToIndex.find(fileExt);
+        if (it != extToIndex.end()) {
+            int fileExtIndex = it->second;
             fileHandlers[fileExtIndex].fullPath.push_back(currentFileSource);
             fileHandlers[fileExtIndex].fileNames.push_back(sourcePathFileNames[i]);
             fileHandlers[fileExtIndex].incrementCount();
         }
     }
-
-    if (totalSorts > 0) std::cout << "\n";
-
     auto arrayTimerDuration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startArrayTimer);
-    std::cout << "Added " << sourcePathCount << " files to internal array in " << float(arrayTimerDuration.count() / 1000.0) << " seconds.\n";
+    std::cout << "Added " << filteredSourceCount << " filtered file(s) to internal array in " << float(arrayTimerDuration.count() / 1000.0) << " seconds.\n";
 }
 
-static void fillSourceArray(const std::string& path) {
+static void fillSourceArray(const std::filesystem::path path) {
     startArrayTimer = std::chrono::steady_clock::now();
 
     try {
         for (const auto& entry : std::filesystem::recursive_directory_iterator(path)) {
             if (!entry.is_regular_file()) continue;
-            std::string fullPath = entry.path().string();
+            // Convert using the helper function
+            std::string fullPath = u8_to_string(entry.path().u8string());
+            std::string fileName = u8_to_string(entry.path().filename().u8string());
             sourcePathFilesFullPath.push_back(std::move(fullPath));
-            sourcePathFileNames.push_back(entry.path().filename().string());
+            sourcePathFileNames.push_back(fileName);
             ++sourcePathCount;
         }
     }
@@ -426,7 +437,7 @@ static void fillSourceArray(const std::string& path) {
     }
 }
 
-static void handleConsoleParam(const std::string param) {
+static void handleConsoleParam(const std::string& param) {
     if (param == "-postclean") {
         postClean = true;
     }
@@ -454,44 +465,47 @@ static void handleConsoleParam(const std::string param) {
         }
     }
     else {
-		std::cerr << "Unknown parameter: " << param << std::endl;
-		std::exit(1);
+        std::cerr << "Unknown parameter: " << param << std::endl;
+        std::exit(1);
     }
 }
 
 int main(int argc, char* argv[]) {
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-	SetConsoleTitleA("Sorter");
+    // Process command-line parameters.
+    for (int i = 1; i < argc; ++i) {
+        handleConsoleParam(argv[i]);
+    }
 
-	//Handles flag(s)
-	for (int i = 1; i < argc; ++i) {
-		handleConsoleParam(argv[i]);
-	}
+    // Build the folder structure.
+    buildFileStructure();
 
-	//Will build the folder structure that the program uses
-	buildFileStructure();
+    // Create fileHandlers only for the (possibly filtered) file types.
+    for (size_t i = 0; i < allFileTypes.size(); i++) {
+        fileHandlers.push_back(fileHandler(allFileTypes[i], pathAppends[i], basePath));
+    }
 
-	//Fills the vector with FileHandlers of each supported type
-	for (int i = 0; i < DIF_FILE_TYPES; i++) {
-		fileHandlers.push_back(fileHandler(allFileTypes->at(i), pathAppends->at(i), basePath));
-	}
+    // Add files into arrays to be sorted.
+    fillSourceArray(sourcePath);
 
-	//Adds files into arrays to be sorted
-	fillSourceArray(sourcePath);
+    // Build the extension mapping.
+    std::unordered_map<std::string, int> extToIndex;
+    for (size_t i = 0; i < fileHandlers.size(); i++) {
+        extToIndex[fileHandlers[i].fileType] = static_cast<int>(i);
+    }
 
-	sortArrays();
+    // Populate each fileHandler with matching files.
+    sortArrays(extToIndex);
 
-	//Calculates size of the source folder
-	getFolderSize();
+    // Calculate source folder size.
+    getFolderSize();
 
-	//Sorts all files (including folders)
-	sortAll();
+    // Sort files.
+    sortAll();
 
-	//Cleans source if the flag was passed
-	cleanSource();
+    // Clean source if flag was passed.
+    cleanSource();
 
-	//Exit sequence
-	std::cout << "\nPress any key to exit...";
-	char storeExitChar = getchar();
+    // Exit sequence.
+    std::cout << "\nPress any key to exit...";
+    getchar();
 }
