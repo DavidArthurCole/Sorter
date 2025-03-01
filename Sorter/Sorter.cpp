@@ -232,7 +232,7 @@ static void cleanSource() {
         std::cout << "\nStarting post-clean process (removing sorted files)...\n";
 
         int removedCount = 0;
-        // Iterate over each fileHandler, and for each sorted file remove it from the source.
+        // Iterate over each fileHandler, then each sorted file in that handler.
         for (auto& fh : fileHandlers) {
             for (const auto& sortedFile : fh.fullPath) {
                 try {
@@ -247,17 +247,14 @@ static void cleanSource() {
             }
         }
         std::cout << "Removed " << removedCount << " sorted file(s) from the source directory.\n";
-
-        auto cleanDuration = std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::steady_clock::now() - startClean);
+        auto cleanDuration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startClean);
         std::cout << "Post-clean finished in " << float(cleanDuration.count() / 1000.0) << " seconds.\n";
     }
     else if (postClean && freshSource) {
         std::cout << "\nSkipping post-clean as the source was freshly built\n";
     }
 
-    auto durationExec = std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::steady_clock::now() - startExec);
+    auto durationExec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startExec);
     std::cout << "Sorting program completed in " << float(durationExec.count() / 1000.0) << " seconds.\n";
 }
 
